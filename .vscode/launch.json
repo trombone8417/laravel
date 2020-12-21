@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+
+        {
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
@@ -12,7 +20,7 @@
             // add this
             "ignore": [
                 "**/vendor/**/*.php"
-    ]
+            ]
         },
         {
             "name": "Launch currently open script",
