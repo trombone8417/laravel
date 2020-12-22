@@ -2093,6 +2093,71 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2100,8 +2165,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         tagName: ""
       },
       addModal: false,
+      editModal: false,
       isAdding: false,
-      tags: []
+      tags: [],
+      editData: {
+        tagName: ""
+      },
+      index: -1,
+      showDeleteModal: false,
+      isDeleting: false,
+      deleteItem: {},
+      deletingIndex: -1
     };
   },
   methods: {
@@ -2119,11 +2193,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   break;
                 }
 
-                return _context.abrupt("return", _this.e('Tag name is required'));
+                return _context.abrupt("return", _this.e("Tag name is required"));
 
               case 2:
                 _context.next = 4;
-                return _this.callApi('post', 'app/create_tag', _this.data);
+                return _this.callApi("post", "app/create_tag", _this.data);
 
               case 4:
                 res = _context.sent;
@@ -2133,13 +2207,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   // 若有新資料加入，加入Array
                   _this.tags.unshift(res.data);
 
-                  _this.s('Tag has been added successfully!'); // 關閉modal
+                  _this.s("Tag has been added successfully!"); // 關閉modal
 
 
                   _this.addModal = false;
-                  _this.data.tagName = '';
+                  _this.data.tagName = "";
                 } else {
-                  _this.swr();
+                  if (res.status == 422) {
+                    if (res.data.errors.tagName) {
+                      _this.i(res.data.errors.tagName[0]);
+                    }
+                  } else {
+                    _this.swr();
+                  }
                 }
 
               case 6:
@@ -2149,35 +2229,134 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    editTag: function editTag() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(_this2.editData.tagName.trim() == "")) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.e("Tag name is required"));
+
+              case 2:
+                _context2.next = 4;
+                return _this2.callApi("post", "app/edit_tags", _this2.editData);
+
+              case 4:
+                res = _context2.sent;
+
+                // 201 新增tag成功
+                if (res.status === 200) {
+                  // 修改TagName的文字
+                  _this2.tags[_this2.index].tagName = _this2.editData.tagName;
+
+                  _this2.s("Tag has been edited successfully!"); // 關閉modal
+
+
+                  _this2.editModal = false;
+                } else {
+                  if (res.status == 422) {
+                    if (res.data.errors.tagName) {
+                      _this2.i(res.data.errors.tagName[0]);
+                    }
+                  } else {
+                    _this2.swr();
+                  }
+                }
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    showEditModal: function showEditModal(tag, index) {
+      var obj = {
+        id: tag.id,
+        tagName: tag.tagName
+      };
+      this.editData = obj;
+      this.editModal = true;
+      this.index = index;
+    },
+    deleteTag: function deleteTag() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.isDeleting = true;
+                _context3.next = 3;
+                return _this3.callApi("post", "app/delete_tags", _this3.deleteItem);
+
+              case 3:
+                res = _context3.sent;
+
+                if (res.status === 200) {
+                  _this3.tags.splice(_this3.deletingIndex, 1);
+
+                  _this3.s("Tag has been deleted successfully!");
+                } else {
+                  _this3.swr();
+                }
+
+                _this3.isDeleting = false;
+                _this3.showDeleteModal = false;
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    showDeletingModal: function showDeletingModal(tag, i) {
+      this.deleteItem = tag;
+      this.deletingIndex = i;
+      this.showDeleteModal = true;
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this4 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
       var res;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context2.next = 2;
-              return _this2.callApi('get', 'app/get_tags');
+              _context4.next = 2;
+              return _this4.callApi("get", "app/get_tags");
 
             case 2:
-              res = _context2.sent;
+              res = _context4.sent;
 
               if (res.status == 200) {
-                _this2.tags = res.data;
+                _this4.tags = res.data;
               } else {
-                _this2.swr();
+                _this4.swr();
               }
 
             case 4:
             case "end":
-              return _context2.stop();
+              return _context4.stop();
           }
         }
-      }, _callee2);
+      }, _callee4);
     }))();
   }
 });
@@ -67841,13 +68020,31 @@ var render = function() {
                               [
                                 _c(
                                   "Button",
-                                  { attrs: { type: "info", size: "small" } },
+                                  {
+                                    attrs: { type: "info", size: "small" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.showEditModal(tag, i)
+                                      }
+                                    }
+                                  },
                                   [_vm._v("Edit")]
                                 ),
                                 _vm._v(" "),
                                 _c(
                                   "Button",
-                                  { attrs: { type: "error", size: "small" } },
+                                  {
+                                    attrs: {
+                                      type: "error",
+                                      size: "small",
+                                      loading: tag.isDeleting
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.showDeletingModal(tag, i)
+                                      }
+                                    }
+                                  },
                                   [_vm._v("Delete")]
                                 )
                               ],
@@ -67925,6 +68122,130 @@ var render = function() {
               )
             ],
             1
+          ),
+          _vm._v(" "),
+          _c(
+            "Modal",
+            {
+              attrs: {
+                title: "Edit tag",
+                "mask-closable": false,
+                closable: false
+              },
+              model: {
+                value: _vm.editModal,
+                callback: function($$v) {
+                  _vm.editModal = $$v
+                },
+                expression: "editModal"
+              }
+            },
+            [
+              _c("Input", {
+                attrs: { placeholder: "Edit tag name" },
+                model: {
+                  value: _vm.editData.tagName,
+                  callback: function($$v) {
+                    _vm.$set(_vm.editData, "tagName", $$v)
+                  },
+                  expression: "editData.tagName"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "div",
+                { attrs: { slot: "footer" }, slot: "footer" },
+                [
+                  _c(
+                    "Button",
+                    {
+                      attrs: { type: "default" },
+                      on: {
+                        click: function($event) {
+                          _vm.editModal = false
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "Button",
+                    {
+                      attrs: {
+                        type: "primary",
+                        disabled: _vm.isAdding,
+                        loading: _vm.isAdding
+                      },
+                      on: { click: _vm.editTag }
+                    },
+                    [_vm._v(_vm._s(_vm.isAdding ? "Editing.." : "Edit tag"))]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "Modal",
+            {
+              attrs: { width: "360" },
+              model: {
+                value: _vm.showDeleteModal,
+                callback: function($$v) {
+                  _vm.showDeleteModal = $$v
+                },
+                expression: "showDeleteModal"
+              }
+            },
+            [
+              _c(
+                "p",
+                {
+                  staticStyle: { color: "#f60", "text-align": "center" },
+                  attrs: { slot: "header" },
+                  slot: "header"
+                },
+                [
+                  _c("Icon", { attrs: { type: "ios-information-circle" } }),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Delete confirmation")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticStyle: { "text-align": "center" } }, [
+                _c("p", [
+                  _vm._v(
+                    "\n                        確定要刪除嗎?\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { attrs: { slot: "footer" }, slot: "footer" },
+                [
+                  _c(
+                    "Button",
+                    {
+                      attrs: {
+                        type: "error",
+                        size: "large",
+                        long: "",
+                        loading: _vm.isDeleting,
+                        disabled: _vm.isDeleting
+                      },
+                      on: { click: _vm.deleteTag }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ],
+                1
+              )
+            ]
           )
         ],
         1

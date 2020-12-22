@@ -66,8 +66,16 @@ return [
     | ahead and set this to a sensible default for you out of the box.
     |
     */
+    
+    /**
+     * 亞洲/台北 時區
+     * 清緩存
+     * php artisan cache:clear
+     * php artisan view:clear
+     * php artisan config:cache
+     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Taipei',
 
     /*
     |--------------------------------------------------------------------------
