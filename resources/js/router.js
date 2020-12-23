@@ -9,7 +9,8 @@ import hooks from './components/basic/hooks.vue';
 import methods from './components/basic/methods.vue';
 // projest pages
 import home from './components/pages/home.vue';
-import tags from './components/pages/tags.vue';
+import tags from './admin/pages/tags.vue';
+import category from './admin/pages/category.vue';
 const routes = [
     // project routes...
     {
@@ -19,6 +20,10 @@ const routes = [
     {
         path: '/tags',
         component:tags
+    },
+    {
+        path: '/category',
+        component:category
     },
     {
         path: '/my-new-vue-route',

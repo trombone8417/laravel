@@ -60,4 +60,43 @@ class AdminController extends Controller
     {
         return Tag::orderBy('id','desc')->get();
     }
+    // 上傳圖片
+    public function upload(Request $request)
+    {
+        // 後端驗證請求資料
+        $this->validate($request,[
+            'file' => 'required|mimes:jpg,jpeg,png'
+        ]);
+        // 命名，例如：1608603484.png
+        $picName = time().'.'.$request->file->extension();
+        // 圖片放置地點
+        $request->file->move(public_path('uploads'),$picName);
+        return $picName;
+    }
+    /**
+     *
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function deleteImage(Request $request)
+    {
+        $fileName = $request->imageName;
+        $this->deleteFileFromServer($fileName);
+        return 'done';
+    }
+    /**
+     * 刪除文件
+     *
+     * @param [type] $fileName
+     * @return void
+     */
+    public function deleteFileFromServer($fileName)
+    {
+        $filePath = public_path().'/uploads/'.$fileName;
+        if (file_exists($filePath)) {
+            @unlink($filePath);
+        }
+        return;
+    }
 }

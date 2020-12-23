@@ -3,14 +3,19 @@
     // 暫留以檢視現有屬性的描述。
     // 如需詳細資訊，請瀏覽: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Launch Chrome",
+    "configurations": [{
+            "type": "chrome",
             "request": "launch",
-            "type": "pwa-chrome",
+            "name": "vuejs: chrome",
             "url": "http://127.0.0.1:8000",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}/public",
+            "sourceMapPathOverrides": {
+                "webpack:///resources/assets/js/*.vue": "${workspaceFolder}/resources/assets/js/*.vue",
+                "webpack:///./resources/assets/js/*.js": "${workspaceFolder}/resources/assets/js/*.js",
+                "webpack:///./node_modules/*": "${workspaceFolder}/node_modules/*"
+            }
         },
+
 
         {
             "name": "Listen for XDebug",
