@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
+use App\Category;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -74,7 +75,7 @@ class AdminController extends Controller
         return $picName;
     }
     /**
-     *
+     * 刪除圖片
      *
      * @param Request $request
      * @return void
@@ -82,6 +83,7 @@ class AdminController extends Controller
     public function deleteImage(Request $request)
     {
         $fileName = $request->imageName;
+        // 呼叫刪除文件
         $this->deleteFileFromServer($fileName);
         return 'done';
     }
@@ -93,10 +95,52 @@ class AdminController extends Controller
      */
     public function deleteFileFromServer($fileName)
     {
-        $filePath = public_path().'/uploads/'.$fileName;
+        $filePath = public_path().$fileName;
         if (file_exists($filePath)) {
+            // 刪除文件
             @unlink($filePath);
         }
         return;
+    }
+    /**
+     * 新增 Category
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function addCategory(Request $request)
+    {
+        // 驗證請求資料
+        $this->validate($request,[
+            'iconImage'=>'required',
+            'categoryName'=>'required',
+        ]);
+        return Category::create([
+            'iconImage'=> $request->iconImage,
+            'categoryName'=> $request->categoryName,
+        ]);
+    }
+    /**
+     * 資料庫撈取Category資料
+     *
+     * @return void
+     */
+    public function getCategory()
+    {
+        return Category::orderBy('id', 'desc')->get();
+    }
+
+    public function editCategory(Request $request)
+    {
+        // 驗證請求資料
+        $this->validate($request,[
+            'iconImage'=>'required',
+            'categoryName'=>'required',
+        ]);
+        return Category::where('id', $request->id)->update([
+            'iconImage'=> $request->iconImage,
+            'categoryName'=> $request->categoryName,
+        ]);
+
     }
 }
