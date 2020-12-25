@@ -20,6 +20,7 @@ class AdminController extends Controller
         $this->validate($request,[
             'tagName'=>'required'
         ]);
+        // 新增Tag
         return Tag::create([
             'tagName'=> $request->tagName
         ]);
@@ -38,18 +39,23 @@ class AdminController extends Controller
             'tagName'=>'required',
             'id'=>'required',
         ]);
+        // 更新Tag
         return Tag::where('id', $request->id)->update([
             'tagName'=> $request->tagName
         ]);
 
     }
 
+    /**
+     * 刪除Tag
+     */
     public function deleteTag(Request $request)
     {
         // 驗證請求資料
         $this->validate($request,[
             'id'=>'required',
         ]);
+        // 刪除Tag
         return Tag::where('id', $request->id)->delete();
     }
     /**
@@ -59,6 +65,7 @@ class AdminController extends Controller
      */
     public function getTag()
     {
+        // id由大到小排序
         return Tag::orderBy('id','desc')->get();
     }
     // 上傳圖片
@@ -82,9 +89,10 @@ class AdminController extends Controller
      */
     public function deleteImage(Request $request)
     {
+        // 取得照片位置
         $fileName = $request->imageName;
         // 呼叫刪除文件
-        $this->deleteFileFromServer($fileName);
+        $this->deleteFileFromServer($fileName, false);
         return 'done';
     }
     /**
@@ -93,9 +101,13 @@ class AdminController extends Controller
      * @param [type] $fileName
      * @return void
      */
-    public function deleteFileFromServer($fileName)
+    public function deleteFileFromServer($fileName, $hasFullPath = false)
     {
-        $filePath = public_path().$fileName;
+        if (!$hasFullPath) {
+            // 照片絕對位置
+            $filePath = public_path().$fileName;
+        }
+        // 若照片存在的話
         if (file_exists($filePath)) {
             // 刪除文件
             @unlink($filePath);
@@ -115,6 +127,7 @@ class AdminController extends Controller
             'iconImage'=>'required',
             'categoryName'=>'required',
         ]);
+        // 新增Category
         return Category::create([
             'iconImage'=> $request->iconImage,
             'categoryName'=> $request->categoryName,
@@ -127,9 +140,12 @@ class AdminController extends Controller
      */
     public function getCategory()
     {
+        // id由大到小排序
         return Category::orderBy('id', 'desc')->get();
     }
-
+    /**
+     * 編輯Category
+     */
     public function editCategory(Request $request)
     {
         // 驗證請求資料
@@ -137,10 +153,24 @@ class AdminController extends Controller
             'iconImage'=>'required',
             'categoryName'=>'required',
         ]);
+        // 更新Category
         return Category::where('id', $request->id)->update([
             'iconImage'=> $request->iconImage,
             'categoryName'=> $request->categoryName,
         ]);
 
+    }
+    /**
+     * 刪除Category
+     */
+    public function deleteCategory(Request $request){
+        // 刪除uploads的圖片
+        $this->deleteFileFromServer($request->iconImage);
+        // 驗證請求資料
+        $this->validate($request,[
+            'id'=>'required',
+        ]);
+        // 刪除Category
+        return Category::where('id', $request->id)->delete();
     }
 }

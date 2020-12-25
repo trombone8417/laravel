@@ -151,34 +151,15 @@
                         >
                     </div>
                 </Modal>
-                <!-- 確認是否刪除對話框 18 4:58-->
-                <Modal v-model="showDeleteModal" width="360">
-                    <p slot="header" style="color:#f60;text-align:center">
-                        <Icon type="ios-information-circle"></Icon>
-                        <span>Delete confirmation</span>
-                    </p>
-                    <div style="text-align:center">
-                        <p>
-                            確定要刪除嗎?
-                        </p>
-                    </div>
-                    <div slot="footer">
-                        <Button
-                            type="error"
-                            size="large"
-                            long
-                            :loading="isDeleting"
-                            :disabled="isDeleting"
-                            @click="deleteTag"
-                            >Delete</Button
-                        >
-                    </div>
-                </Modal>
+                <!-- 刪除提示 -->
+                <delete-modal></delete-modal>
             </div>
         </div>
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+import deleteModal from '../components/deleteModal';
 export default {
     data() {
         return {
@@ -217,7 +198,7 @@ export default {
             if (this.data.iconImage.trim() == '')
                 return this.e("Icon image name is required");
             // 圖片位置
-            this.data.iconImage = `/uploads/${this.data.iconImage}`
+            this.data.iconImage = `${this.data.iconImage}`
             const res = await this.callApi("post", "app/create_category", this.data);
             // 201 新增category成功
             if (res.status === 201) {
@@ -284,22 +265,16 @@ export default {
             this.index = index;
             this.isEditingItem = true
         },
-        async deleteTag() {
-            this.isDeleting = true
-            const res = await this.callApi("post", "app/delete_tags", this.deleteItem);
-            if (res.status === 200) {
-                this.tags.splice(this.deletingIndex, 1);
-                this.s("Tag has been deleted successfully!");
-            } else {
-                this.swr();
-            }
-            this.isDeleting = false
-            this.showDeleteModal = false
-        },
-        showDeletingModal(tag,i){
-            this.deleteItem = tag
-            this.deletingIndex = i
-            this.showDeleteModal = true
+
+        showDeletingModal(category,i){
+        const  deleteModalObj = {
+            showDeleteModal : true,
+            deleteUrl: 'app/delete_category',
+            data :category,
+            deletingIndex:i,
+            isDeleted: false,
+        }
+            this.$store.commit("setDeletingModalObj", deleteModalObj);
         },
         // 設置成功
         handleSuccess (res, file) {
@@ -370,6 +345,22 @@ export default {
             this.swr();
         }
     },
+    components : {
+        deleteModal,
+    },
+    computed : {
+        ...mapGetters(['getDeleteModalObj'])
+    },
+    watch : {
+        getDeleteModalObj(obj){
+            if (obj.isDeleted) {
+                console.log('obj.deletingIndex, 1')
+                this.categoryLists.splice(obj.deletingIndex, 1);
+            }
+        }
+    }
+
+
 
 };
 </script>

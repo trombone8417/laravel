@@ -13,16 +13,19 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Tag
 Route::post('app/create_tag','AdminController@addTag');
 Route::get('app/get_tags','AdminController@getTag');
 Route::post('app/edit_tags','AdminController@editTag');
 Route::post('app/delete_tags','AdminController@deleteTag');
+// 圖片
 Route::post('app/upload','AdminController@upload');
 Route::post('app/delete_image','AdminController@deleteImage');
+// Category
 Route::post('app/create_category','AdminController@addCategory');
 Route::get('app/get_category','AdminController@getCategory');
 Route::post('app/edit_category','AdminController@editCategory');
+Route::post('app/delete_category', 'AdminController@deleteCategory');
 
 Route::get('/', function () {
     return view('welcome');
