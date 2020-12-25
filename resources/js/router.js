@@ -11,8 +11,13 @@ import methods from './components/basic/methods.vue';
 import home from './components/pages/home.vue';
 import tags from './admin/pages/tags.vue';
 import category from './admin/pages/category.vue';
+import usecom from './vuex/usecom.vue';
 const routes = [
     // project routes...
+    {
+        path: '/testvuex',
+        component:usecom,
+    },
     {
         path: '/',
         component:home

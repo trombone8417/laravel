@@ -145,6 +145,7 @@ export default {
             isDeleting: false,
             deleteItem:{},
             deletingIndex:-1,
+            websiteSettings:[]
         };
     },
 

@@ -151,7 +151,7 @@
                         >
                     </div>
                 </Modal>
-                <!-- 確認是否刪除對話框 -->
+                <!-- 確認是否刪除對話框 18 4:58-->
                 <Modal v-model="showDeleteModal" width="360">
                     <p slot="header" style="color:#f60;text-align:center">
                         <Icon type="ios-information-circle"></Icon>
@@ -205,6 +205,7 @@ export default {
             token:'',
             isIconImageNew:false,
             isEditingItem:false,
+            websiteSettings:[]
         };
     },
 
@@ -345,7 +346,7 @@ export default {
                 // 刪除檔名
                 this.$refs.uploads.clearFiles()
             }
-       
+
             const res = await this.callApi('post', 'app/delete_image', {imageName: image})
             if (res.status!=200) {
                 this.data.iconImage = image
