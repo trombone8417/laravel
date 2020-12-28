@@ -62,10 +62,10 @@
                         </table>
                     </div>
                 </div>
-                <!-- 加入tag -->
+                <!-- 加入Admin -->
                 <Modal
                     v-model="addModal"
-                    title="Add tag"
+                    title="Add Admin"
                     :mask-closable="false"
                     :closable="false"
                 >
@@ -120,21 +120,51 @@
                 <!-- 編輯tag -->
                 <Modal
                     v-model="editModal"
-                    title="Edit tag"
+                    title="Edit Admin"
                     :mask-closable="false"
                     :closable="false"
                 >
-                    <Input
-                        v-model="editData.tagName"
-                        placeholder="Edit tag name"
-                    />
+                    <div class="space">
+                        <Input
+                            type="text"
+                            v-model="editData.fullName"
+                            placeholder="全名"
+                        />
+                    </div>
+                    <div class="space">
+                        <Input
+                            type="email"
+                            v-model="editData.email"
+                            placeholder="email"
+                        />
+                    </div>
+                    <div class="space">
+                        <Input
+                            type="password"
+                            v-model="editData.password"
+                            placeholder="密碼"
+                        />
+                    </div>
+                    <div class="space">
+                        <Select v-model="data.userType" placeholder="請選擇...">
+                            <Option
+                                value="Admin"
+                                >Admin</Option
+                            >
+                            <Option
+                                value="Editor"
+                                >Editor</Option
+                            >
+                        </Select>
+                    </div>
+
                     <div slot="footer">
                         <Button type="default" @click="editModal = false"
                             >關閉</Button
                         >
                         <Button
                             type="primary"
-                            @click="editTag"
+                            @click="editAdmin"
                             :disabled="isAdding"
                             :loading="isAdding"
                             >{{ isAdding ? "處理中..." : "編輯tag" }}</Button
@@ -157,6 +187,7 @@ export default {
                 fullName: '',
                 email: '',
                 password: '',
+                // 預設使用者角色為Admin
                 userType: 'Admin',
             },
             addModal: false,
@@ -187,7 +218,7 @@ export default {
             // 201 新增Admin成功
             if (res.status === 201) {
                 // 若有新資料加入，加入Array
-                this.tags.unshift(res.data);
+                this.users.unshift(res.data);
                 this.s("Admin user新增成功!");
                 // 關閉modal
                 this.addModal = false;
@@ -195,9 +226,8 @@ export default {
             } else {
                 // 422新增失敗
                 if (res.status == 422) {
-                    console.log(res.data.errors)
-
                     for(let i in res.data.errors){
+                        // 格式錯誤提示(後端驗證)
                         this.e(res.data.errors[i][0]);
                     }
                 }
@@ -206,28 +236,29 @@ export default {
                 }
             }
         },
-        async editTag() {
+        async editAdmin() {
             // 前端驗證
-            if (this.editData.tagName.trim() == "")
-                return this.e("Tag不得為空!");
+            if (this.editData.fullName.trim() == "") return this.e("Full Name不得為空!");
+            if (this.editData.email.trim() == "") return this.e("Email不得為空!");
+            if (this.editData.userType.trim() == "") return this.e("User Type不得為空!");
             const res = await this.callApi(
                 "post",
-                "app/edit_tags",
+                "app/edit_user",
                 this.editData
             );
             // 201 新增tag成功
             if (res.status === 200) {
                 // 修改TagName的文字
-                this.tags[this.index].tagName = this.editData.tagName;
+                this.users[this.index] = this.editData;
                 this.s("Tag has been edited successfully!");
                 // 關閉modal
                 this.editModal = false;
             } else {
                 // 422新增失敗
                 if (res.status == 422) {
-                    if (res.data.errors.tagName) {
-                        // 顯示錯誤內容
-                        this.i(res.data.errors.tagName[0]);
+                    for(let i in res.data.errors){
+                        // 格式錯誤提示(後端驗證)
+                        this.e(res.data.errors[i][0]);
                     }
                 } else {
                     // 顯示something wrong error
@@ -236,28 +267,27 @@ export default {
                 }
             }
         },
-        showEditModal(tag, index) {
+        showEditModal(user, index) {
             let obj = {
-                id: tag.id,
-                tagName: tag.tagName
+                id: user.id,
+                fullName: user.fullName,
+                email: user.email,
+                userType: user.userType,
             };
             this.editData = obj;
             this.editModal = true;
             this.index = index;
         },
 
-        showDeletingModal(tag, i) {
+        showDeletingModal(user, i) {
             const deleteModalObj = {
                 showDeleteModal: true,
-                deleteUrl: "app/delete_tags",
-                data: tag,
+                deleteUrl: "app/delete_user",
+                data: user,
                 deletingIndex: i,
                 isDeleted: false
             };
             this.$store.commit("setDeletingModalObj", deleteModalObj);
-            // this.deleteItem = tag
-            // this.deletingIndex = i
-            // this.showDeleteModal = true
         }
     },
 
@@ -278,7 +308,7 @@ export default {
     watch: {
         getDeleteModalObj(obj) {
             if (obj.isDeleted) {
-                this.tags.splice(obj.deletingIndex, 1);
+                this.users.splice(obj.deletingIndex, 1);
             }
         }
     }

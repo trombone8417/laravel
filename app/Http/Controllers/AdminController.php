@@ -178,21 +178,67 @@ class AdminController extends Controller
     public function createUser(Request $request)
     {
         $this->validate($request,[
+            // 全名
             'fullName'=>'required',
-            'email'=>'bail|required|email',
+            // Email不能重複，須符合email格式
+            'email'=>'bail|required|email|unique:users',
+            // 密碼不得少於六個字元
             'password'=>'bail|required|min:6',
+            // 使用者角色
             'userType'=>'required',
         ]);
+        // 密碼加密
         $password = bcrypt($request->password);
         $user = User::create([
             'fullName'=>$request->fullName,
+            // 加密過後的密碼
             'email'=>$request->email,
             'password'=>$password,
             'userType'=>$request->userType,
         ]);
         return $user;
     }
+
+    public function editUser(Request $request)
+    {
+        $this->validate($request,[
+            // 全名
+            'fullName'=>'required',
+            // Email不能重複，須符合email格式
+            'email'=>"bail|required|email|unique:users,email,$request->id",
+            // 密碼不得少於六個字元
+            'password'=>'min:6',
+            // 使用者角色
+            'userType'=>'required',
+        ]);
+        // 密碼加密
+        $data = [
+            'fullName'=>$request->fullName,
+            // 加密過後的密碼
+            'email'=>$request->email,
+            'userType'=>$request->userType,
+        ];
+        if ($request->password) {
+            $password = bcrypt($request->password);
+            $data['password'] = $password;
+        }
+        $user = User::where('id', $request->id)->update($data);
+
+        return $user;
+    }
+    public function deleteUser(Request $request)
+    {
+        // 驗證請求資料
+        $this->validate($request,[
+            'id'=>'required',
+        ]);
+        // 刪除User
+        return User::where('id', $request->id)->delete();
+    }
+    // 撈出特權帳號使用者
     public function getUsers(){
         return User::where('userType','!=','User')->get();
     }
+
+
 }

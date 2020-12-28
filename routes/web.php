@@ -29,6 +29,8 @@ Route::post('app/delete_category', 'AdminController@deleteCategory');
 // Admin
 Route::post('app/create_user', 'AdminController@createUser');
 Route::get('app/get_users', 'AdminController@getUsers');
+Route::post('app/edit_user', 'AdminController@editUser');
+Route::post('app/delete_user', 'AdminController@deleteUser');
 
 Route::get('/', function () {
     return view('welcome');
