@@ -26,6 +26,9 @@ Route::post('app/create_category','AdminController@addCategory');
 Route::get('app/get_category','AdminController@getCategory');
 Route::post('app/edit_category','AdminController@editCategory');
 Route::post('app/delete_category', 'AdminController@deleteCategory');
+// Admin
+Route::post('app/create_user', 'AdminController@createUser');
+Route::get('app/get_users', 'AdminController@getUsers');
 
 Route::get('/', function () {
     return view('welcome');

@@ -7,11 +7,12 @@ import firstPage from './components/pages/myFirstVuePage';
 import newRoutePage from './components/pages/newRoutePage';
 import hooks from './components/basic/hooks.vue';
 import methods from './components/basic/methods.vue';
+import usecom from './vuex/usecom.vue';
 // projest pages
 import home from './components/pages/home.vue';
 import tags from './admin/pages/tags.vue';
 import category from './admin/pages/category.vue';
-import usecom from './vuex/usecom.vue';
+import adminusers from './admin/pages/adminusers.vue';
 const routes = [
     // project routes...
     {
@@ -29,6 +30,10 @@ const routes = [
     {
         path: '/category',
         component:category
+    },
+    {
+        path: '/adminusers',
+        component:adminusers
     },
     {
         path: '/my-new-vue-route',
