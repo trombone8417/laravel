@@ -13,6 +13,7 @@ import home from './components/pages/home.vue';
 import tags from './admin/pages/tags.vue';
 import category from './admin/pages/category.vue';
 import adminusers from './admin/pages/adminusers.vue';
+import login from './admin/pages/login.vue';
 const routes = [
     // project routes...
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: '/adminusers',
         component:adminusers
+    },
+    {
+        path: '/login',
+        component:login
     },
     {
         path: '/my-new-vue-route',

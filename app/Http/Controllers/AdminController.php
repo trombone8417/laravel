@@ -6,6 +6,7 @@ use App\Tag;
 use App\Category;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -177,6 +178,7 @@ class AdminController extends Controller
 
     public function createUser(Request $request)
     {
+        // bail：一個屬性首次驗證失敗時，停止此屬性的其他驗證規則。
         $this->validate($request,[
             // 全名
             'fullName'=>'required',
@@ -214,11 +216,12 @@ class AdminController extends Controller
         // 密碼加密
         $data = [
             'fullName'=>$request->fullName,
-            // 加密過後的密碼
+
             'email'=>$request->email,
             'userType'=>$request->userType,
         ];
         if ($request->password) {
+            // 加密過後的密碼
             $password = bcrypt($request->password);
             $data['password'] = $password;
         }
@@ -238,6 +241,24 @@ class AdminController extends Controller
     // 撈出特權帳號使用者
     public function getUsers(){
         return User::where('userType','!=','User')->get();
+    }
+
+    public function adminLogin(Request $request)
+    {
+        $this->validate($request,[
+            'email'=>'bail|required|email',
+            'password'=>'bail|required|min:6',
+        ]);
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json([
+                'msg'=>'登入成功',
+            ]);
+        }else {
+            // 401 Unauthorized
+            return response()->json([
+                'msg'=>'登入失敗',
+            ],401);
+        }
     }
 
 
