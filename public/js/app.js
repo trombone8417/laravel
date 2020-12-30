@@ -3712,7 +3712,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n._1adminOverveiw_table_recent[data-v-c2ef5de0] {\n    margin: 0 auto;\n    margin-top: 220px;\n}\n.login_footer[data-v-c2ef5de0]{\n    text-align: center;\n}\n.login_header[data-v-c2ef5de0]{\n    text-align: center;\n    margin-bottom: 25px;\n}\n", ""]);
+exports.push([module.i, "\n._1adminOverveiw_table_recent[data-v-c2ef5de0] {\r\n    margin: 0 auto;\r\n    margin-top: 220px;\n}\n.login_footer[data-v-c2ef5de0]{\r\n    text-align: center;\n}\n.login_header[data-v-c2ef5de0]{\r\n    text-align: center;\r\n    margin-bottom: 25px;\n}\r\n", ""]);
 
 // exports
 

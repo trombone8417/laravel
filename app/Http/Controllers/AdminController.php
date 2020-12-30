@@ -10,6 +10,31 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    public function index(Request $request)
+    {
+        // 確認是否登入且受否為login頁面
+        // 未登入轉到login頁面
+        // 已經為login頁面的話停止執行避免迴圈
+        if (!Auth::check() && $request->path() != 'login') {
+            return redirect('/login');
+        }
+        // 未登入且在login頁面，顯示歡迎頁面
+        if (!Auth::check() && $request->path() == 'login') {
+           
+            return view('welcome');
+        }
+        $user=Auth::user();
+        // 已登入且角色為User
+        if ($user->userType == 'User') {
+            return redirect('/login');
+        }
+        // 若登入為其他使用者，轉到Home頁面
+        if ($request->path() == 'login') {
+            return redirect('/');
+        }
+
+        return view('welcome');
+    }
     /**
      * 新增Tag
      *
@@ -249,6 +274,16 @@ class AdminController extends Controller
             'email'=>'bail|required|email',
             'password'=>'bail|required|min:6',
         ]);
+        
+        // 確認使用者是否登入且角色為User
+        if (Auth::check() && Auth::user()->userType == 'User') {
+            // 若角色是User的話，登出
+            Auth::logout();
+            // 401 Unauthorized
+            return response()->json([
+                'msg'=>'使用者角色錯誤',
+            ],401);
+        }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json([
                 'msg'=>'登入成功',

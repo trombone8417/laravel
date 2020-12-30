@@ -34,11 +34,14 @@ Route::post('app/delete_user', 'AdminController@deleteUser');
 // 登入
 Route::post('app/admin_login', 'AdminController@adminLogin');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/logout', 'AdminController@logout');
+Route::get('/', 'AdminController@index');
+Route::any('{slug}','AdminController@index');
 
-
-Route::any('{slug}',function(){
-    return view('welcome');
-});
+// part 23 12:55
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+// Route::any('{slug}',function(){
+//     return view('welcome');
+// });
