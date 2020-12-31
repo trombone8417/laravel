@@ -35,6 +35,15 @@ class AdminController extends Controller
 
         return view('welcome');
     }
+
+    /**
+     * 登出
+     */
+    public function logout(){
+        Auth::logout();
+        return redirect('/login');
+    }
+
     /**
      * 新增Tag
      *

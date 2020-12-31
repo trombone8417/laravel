@@ -3020,14 +3020,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       data: {
-        email: '',
-        password: ''
+        email: "",
+        password: ""
       },
       isLogging: false
     };
@@ -3068,13 +3066,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 _this.isLogging = true;
                 _context.next = 9;
-                return _this.callApi('post', 'app/admin_login', _this.data);
+                return _this.callApi("post", "app/admin_login", _this.data);
 
               case 9:
                 res = _context.sent;
 
                 if (res.status === 200) {
-                  _this.s(res.data.msg);
+                  _this.s(res.data.msg); // 若登入成功的話，導回Home頁面
+
+
+                  window.location = "/";
                 } else {
                   if (res.status === 401) {
                     _this.e(res.data.msg);
@@ -3593,11 +3594,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       isLoggedIn: false
     };
+  },
+  created: function created() {
+    this.$store.commit('updateUser', this.user);
+    console.log(this.user);
   }
 });
 
@@ -3712,7 +3720,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n._1adminOverveiw_table_recent[data-v-c2ef5de0] {\r\n    margin: 0 auto;\r\n    margin-top: 220px;\n}\n.login_footer[data-v-c2ef5de0]{\r\n    text-align: center;\n}\n.login_header[data-v-c2ef5de0]{\r\n    text-align: center;\r\n    margin-bottom: 25px;\n}\r\n", ""]);
+exports.push([module.i, "\n._1adminOverveiw_table_recent[data-v-c2ef5de0] {\r\n  margin: 0 auto;\r\n  margin-top: 220px;\n}\n.login_footer[data-v-c2ef5de0] {\r\n  text-align: center;\n}\n.login_header[data-v-c2ef5de0] {\r\n  text-align: center;\r\n  margin-bottom: 25px;\n}\r\n", ""]);
 
 // exports
 
@@ -69991,7 +69999,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.isLoggedIn
+      _vm.$store.state.user
         ? _c("div", [
             _c("div", { staticClass: "_1side_menu" }, [
               _vm._m(0),
@@ -70063,7 +70071,19 @@ var render = function() {
                         )
                       ],
                       1
-                    )
+                    ),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c(
+                        "a",
+                        { attrs: { href: "/logout" } },
+                        [
+                          _c("Icon", { attrs: { type: "ios-speedometer" } }),
+                          _vm._v(" 登出")
+                        ],
+                        1
+                      )
+                    ])
                   ])
                 ])
               ])
@@ -88304,7 +88324,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
       deletingIndex: -1,
       isDeleted: false
     },
-    tags: []
+    user: false
   },
   getters: {
     getCounter: function getCounter(state) {
@@ -88330,6 +88350,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     setDeletingModalObj: function setDeletingModalObj(state, data) {
       state.deleteModalObj = data;
+    },
+    updateUser: function updateUser(state, data) {
+      state.user = data;
     }
   },
   actions: {

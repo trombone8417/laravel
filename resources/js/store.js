@@ -4,43 +4,46 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         counter: 1000,
-        deleteModalObj : {
-            showDeleteModal : false,
+        deleteModalObj: {
+            showDeleteModal: false,
             deleteUrl: '',
-            data :null,
-            deletingIndex:-1,
+            data: null,
+            deletingIndex: -1,
             isDeleted: false,
         },
-        tags: [],
+        user: false,
     },
-    getters:{
-        getCounter(state){
+    getters: {
+        getCounter(state) {
             return state.counter;
         },
-        getDeleteModalObj(state){
+        getDeleteModalObj(state) {
             return state.deleteModalObj;
         }
     },
     mutations: {
-        changeTheCounter(state,data){
+        changeTheCounter(state, data) {
             state.counter += data;
         },
-        setDeleteModal(state,data){
+        setDeleteModal(state, data) {
             const deleteModalObj = {
-                showDeleteModal : false,
+                showDeleteModal: false,
                 deleteUrl: '',
-                data :null,
-                deletingIndex:-1,
+                data: null,
+                deletingIndex: -1,
                 isDeleted: data,
             }
             state.deleteModalObj = deleteModalObj;
         },
-        setDeletingModalObj(state, data){
+        setDeletingModalObj(state, data) {
             state.deleteModalObj = data;
         },
+        updateUser(state, data) {
+            state.user = data;
+        },
     },
-    actions :{
-        changeCounterAction({commit}, data){
+    actions: {
+        changeCounterAction({ commit }, data) {
             commit('changeTheCounter', data);
         }
     },
