@@ -14,56 +14,61 @@ import tags from './admin/pages/tags.vue';
 import category from './admin/pages/category.vue';
 import adminusers from './admin/pages/adminusers.vue';
 import login from './admin/pages/login.vue';
+import role from './admin/pages/role.vue';
 const routes = [
     // project routes...
     {
         path: '/testvuex',
-        component:usecom,
+        component: usecom,
     },
     {
         path: '/',
-        component:home
+        component: home
     },
     {
         path: '/tags',
-        component:tags
+        component: tags
     },
     {
         path: '/category',
-        component:category
+        component: category
     },
     {
         path: '/adminusers',
-        component:adminusers
+        component: adminusers
+    },
+    {
+        path: '/role',
+        component: role
     },
     {
         path: '/login',
-        component:login
+        component: login
     },
     {
         path: '/my-new-vue-route',
-        component:firstPage
+        component: firstPage
     },
     // basic tutorials routes
     {
         path: '/my-new-vue-route',
-        component:firstPage
+        component: firstPage
     },
     {
         path: '/new-route',
-        component:newRoutePage
+        component: newRoutePage
     },
     {
         path: '/hooks',
-        component:hooks
+        component: hooks
     },
     {
         path: '/methods',
-        component:methods
+        component: methods
     },
 ];
 export default new Router({
     // 使用真實路徑
-    mode : 'history',
+    mode: 'history',
     routes
 });

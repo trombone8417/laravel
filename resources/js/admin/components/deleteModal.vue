@@ -54,7 +54,7 @@ export default {
                 this.getDeleteModalObj.data
             );
             if (res.status === 200) {
-                this.s('Tag has been deleted successfully!');
+                this.s('刪除成功!');
                 // 進行刪除
                 this.$store.commit('setDeleteModal', true);
             } else {

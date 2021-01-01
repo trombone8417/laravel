@@ -33,6 +33,11 @@ Route::post('/create_user', 'AdminController@createUser');
 Route::get('/get_users', 'AdminController@getUsers');
 Route::post('/edit_user', 'AdminController@editUser');
 Route::post('/delete_user', 'AdminController@deleteUser');
+// 角色
+Route::post('/create_role', 'AdminController@createRole');
+Route::get('/get_roles', 'AdminController@getRoles');
+Route::post('/edit_role', 'AdminController@editRole');
+Route::post('/delete_role', 'AdminController@deleteRole');
 // 登入
 Route::post('/admin_login', 'AdminController@adminLogin');
 });

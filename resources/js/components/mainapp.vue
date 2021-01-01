@@ -22,6 +22,7 @@
               <li><router-link to="tags"><Icon type="ios-speedometer" /> Tags</router-link></li>
               <li><router-link to="category"><Icon type="ios-speedometer" /> Category</router-link></li>
               <li><router-link to="adminusers"><Icon type="ios-speedometer" /> Admin Users</router-link></li>
+              <li><router-link to="role"><Icon type="ios-speedometer" /> 角色管理</router-link></li>
               <li><a href="/logout"><Icon type="ios-speedometer" /> 登出</a></li>
               <!-- 24 4:54 -->
             </ul>

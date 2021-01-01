@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Tag;
 use App\Category;
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -304,6 +305,41 @@ class AdminController extends Controller
             ],401);
         }
     }
+    /**
+     * 新增角色
+     */
+    public function createRole(Request $request)
+    {
+        $this->validate($request,[
+            'roleName'=>'required',
+        ]);
+        return Role::create([
+            'roleName' => $request->roleName
+        ]);
+    }
+    public function editRole(Request $request)
+    {
+        $this->validate($request,[
+            'roleName'=>'required',
+        ]);
+        return Role::where('id', $request->id)->update([
+            'roleName' => $request->roleName
+        ]);
+    }
+    public function deleteRole(Request $request)
+    {
+        // 驗證請求資料
+        $this->validate($request,[
+            'id'=>'required',
+        ]);
+        // 刪除User
+        return Role::where('id', $request->id)->delete();
+    }
 
 
+    // 撈出特權帳號使用者
+    public function getRoles(){
+        return Role::all();
+    }
+    
 }
