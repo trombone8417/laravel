@@ -92,15 +92,15 @@
                     </div>
 
                     <div class="space">
-                        <Select v-model="data.userType" placeholder="請選擇...">
+                        <Select v-model="data.role_id" placeholder="請選擇...">
                             <Option
-                                value="Admin"
-                                >Admin</Option
+                                :value="r.id"
+                                v-for="(r,i) in roles"
+                                :key="i"
+                                v-if="roles.length"
+                                >{{r.roleName}}</Option
                             >
-                            <Option
-                                value="Editor"
-                                >Editor</Option
-                            >
+
                         </Select>
                     </div>
 
@@ -146,15 +146,15 @@
                         />
                     </div>
                     <div class="space">
-                        <Select v-model="data.userType" placeholder="請選擇...">
+                        <Select v-model="editData.role_id" placeholder="請選擇...">
                             <Option
-                                value="Admin"
-                                >Admin</Option
+                                :value="r.id"
+                                v-for="(r,i) in roles"
+                                :key="i"
+                                v-if="roles.length"
+                                >{{r.roleName}}</Option
                             >
-                            <Option
-                                value="Editor"
-                                >Editor</Option
-                            >
+
                         </Select>
                     </div>
 
@@ -187,8 +187,7 @@ export default {
                 fullName: '',
                 email: '',
                 password: '',
-                // 預設使用者角色為Admin
-                userType: 'Admin',
+                role_id: null
             },
             addModal: false,
             editModal: false,
@@ -202,7 +201,8 @@ export default {
             isDeleting: false,
             deleteItem: {},
             deletingIndex: -1,
-            websiteSettings: []
+            websiteSettings: [],
+            roles: []
         };
     },
 
@@ -213,7 +213,8 @@ export default {
             if (this.data.fullName.trim() == "") return this.e("Full Name不得為空!");
             if (this.data.email.trim() == "") return this.e("Email不得為空!");
             if (this.data.password.trim() == "") return this.e("Password不得為空!");
-            if (this.data.userType.trim() == "") return this.e("User Type不得為空!");
+            if (!this.data.role_id) return this.e("role_id不得為空!");
+
             const res = await this.callApi("post", "app/create_user", this.data);
             // 201 新增Admin成功
             if (res.status === 201) {
@@ -240,7 +241,7 @@ export default {
             // 前端驗證
             if (this.editData.fullName.trim() == "") return this.e("Full Name不得為空!");
             if (this.editData.email.trim() == "") return this.e("Email不得為空!");
-            if (this.editData.userType.trim() == "") return this.e("User Type不得為空!");
+            if (!this.editData.role_id) return this.e("role_id不得為空!");
             const res = await this.callApi(
                 "post",
                 "app/edit_user",
@@ -292,9 +293,18 @@ export default {
     },
 
     async created() {
-        const res = await this.callApi("get", "app/get_users");
+        const [res, resRole] = await Promise.all([
+            this.callApi("get", "app/get_users"),
+            this.callApi("get", "app/get_roles")
+        ])
+
         if (res.status == 200) {
             this.users = res.data;
+        } else {
+            this.swr();
+        }
+        if (resRole.status == 200) {
+            this.roles = resRole.data;
         } else {
             this.swr();
         }

@@ -15,6 +15,7 @@ import category from './admin/pages/category.vue';
 import adminusers from './admin/pages/adminusers.vue';
 import login from './admin/pages/login.vue';
 import role from './admin/pages/role.vue';
+import assignRole from './admin/pages/assignRole';
 const routes = [
     // project routes...
     {
@@ -40,6 +41,10 @@ const routes = [
     {
         path: '/role',
         component: role
+    },
+    {
+        path: '/assignRole',
+        component: assignRole
     },
     {
         path: '/login',

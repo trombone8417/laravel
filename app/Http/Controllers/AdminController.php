@@ -8,6 +8,7 @@ use App\User;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -21,7 +22,7 @@ class AdminController extends Controller
         }
         // 未登入且在login頁面，顯示歡迎頁面
         if (!Auth::check() && $request->path() == 'login') {
-           
+
             return view('welcome');
         }
         $user=Auth::user();
@@ -222,7 +223,7 @@ class AdminController extends Controller
             // 密碼不得少於六個字元
             'password'=>'bail|required|min:6',
             // 使用者角色
-            'userType'=>'required',
+            'role_id'=>'required',
         ]);
         // 密碼加密
         $password = bcrypt($request->password);
@@ -231,7 +232,7 @@ class AdminController extends Controller
             // 加密過後的密碼
             'email'=>$request->email,
             'password'=>$password,
-            'userType'=>$request->userType,
+            'role_id'=>$request->userType,
         ]);
         return $user;
     }
@@ -246,14 +247,13 @@ class AdminController extends Controller
             // 密碼不得少於六個字元
             'password'=>'min:6',
             // 使用者角色
-            'userType'=>'required',
+            'role_id'=>'required',
         ]);
         // 密碼加密
         $data = [
             'fullName'=>$request->fullName,
-
             'email'=>$request->email,
-            'userType'=>$request->userType,
+            'role_id'=>$request->role_id,
         ];
         if ($request->password) {
             // 加密過後的密碼
@@ -275,7 +275,7 @@ class AdminController extends Controller
     }
     // 撈出特權帳號使用者
     public function getUsers(){
-        return User::where('userType','!=','User')->get();
+        return User::orderBy('id','desc')->get();
     }
 
     public function adminLogin(Request $request)
@@ -284,9 +284,13 @@ class AdminController extends Controller
             'email'=>'bail|required|email',
             'password'=>'bail|required|min:6',
         ]);
-        
-        // 確認使用者是否登入且角色為User
-        if (Auth::check() && Auth::user()->userType == 'User') {
+
+
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            // 確認使用者是否登入且角色為User
+            $user = Auth::user();
+            Log::info($user->role);
+        if ($user->role->isAdmin == 0) {
             // 若角色是User的話，登出
             Auth::logout();
             // 401 Unauthorized
@@ -294,7 +298,6 @@ class AdminController extends Controller
                 'msg'=>'使用者角色錯誤',
             ],401);
         }
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json([
                 'msg'=>'登入成功',
             ]);
@@ -341,5 +344,5 @@ class AdminController extends Controller
     public function getRoles(){
         return Role::all();
     }
-    
+
 }
