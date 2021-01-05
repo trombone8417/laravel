@@ -154,7 +154,6 @@
                                 v-if="roles.length"
                                 >{{r.roleName}}</Option
                             >
-
                         </Select>
                     </div>
 

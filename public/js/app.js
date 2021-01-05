@@ -2246,7 +2246,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2510,15 +2509,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _components_deleteModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/deleteModal */ "./resources/js/admin/components/deleteModal.vue");
 
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -2574,256 +2565,89 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       data: {
-        roleName: ""
+        roleName: "",
+        role_id: null
       },
-      addModal: false,
-      editModal: false,
-      isAdding: false,
       roles: [],
-      editData: {
-        roleName: ""
-      },
-      index: -1,
-      showDeleteModal: false,
-      isDeleting: false,
-      deleteItem: {},
-      deletingIndex: -1,
-      websiteSettings: []
+      resources: [{
+        resourceName: 'Tags',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'tags'
+      }, {
+        resourceName: 'Category',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'category'
+      }, {
+        resourceName: 'Admin users',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'adminusers'
+      }, {
+        resourceName: 'Role',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'role'
+      }, {
+        resourceName: 'Assign role',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'assignRole'
+      }, {
+        resourceName: 'Home',
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: 'home'
+      }]
     };
   },
-  methods: {
-    // 新增role
-    add: function add() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(_this.data.roleName.trim() == "")) {
-                  _context.next = 2;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.e("Role不得為空!"));
-
-              case 2:
-                _context.next = 4;
-                return _this.callApi("post", "app/create_role", _this.data);
-
-              case 4:
-                res = _context.sent;
-
-                // 201 新增tag成功
-                if (res.status === 201) {
-                  // 若有新資料加入，加入Array
-                  _this.roles.unshift(res.data);
-
-                  _this.s("角色新增成功!"); // 關閉modal
-
-
-                  _this.addModal = false;
-                  _this.data.roleName = "";
-                } else {
-                  // 422新增失敗
-                  if (res.status == 422) {
-                    if (res.data.errors.roleName) {
-                      // 顯示錯誤內容
-                      _this.i(res.data.errors.roleName[0]);
-                    }
-                  } else {
-                    _this.swr();
-                  }
-                }
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    edit: function edit() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!(_this2.editData.roleName.trim() == "")) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this2.e("role不得為空!"));
-
-              case 2:
-                _context2.next = 4;
-                return _this2.callApi("post", "app/edit_role", _this2.editData);
-
-              case 4:
-                res = _context2.sent;
-
-                // 201 新增tag成功
-                if (res.status === 200) {
-                  // 修改TagName的文字
-                  _this2.roles[_this2.index].roleName = _this2.editData.roleName;
-
-                  _this2.s("角色編輯成功!"); // 關閉modal
-
-
-                  _this2.editModal = false;
-                } else {
-                  // 422新增失敗
-                  if (res.status == 422) {
-                    if (res.data.errors.roleName) {
-                      // 顯示錯誤內容
-                      _this2.i(res.data.errors.roleName[0]);
-                    }
-                  } else {
-                    // 顯示something wrong error
-                    // 出現錯誤，請再試一次
-                    _this2.swr();
-                  }
-                }
-
-              case 6:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-    showEditModal: function showEditModal(role, index) {
-      var obj = {
-        id: role.id,
-        roleName: role.roleName
-      };
-      this.editData = obj;
-      this.editModal = true;
-      this.index = index;
-    },
-    showDeletingModal: function showDeletingModal(role, i) {
-      var deleteModalObj = {
-        showDeleteModal: true,
-        deleteUrl: "app/delete_role",
-        data: role,
-        deletingIndex: i,
-        isDeleted: false
-      };
-      this.$store.commit("setDeletingModalObj", deleteModalObj); // this.deleteItem = tag
-      // this.deletingIndex = i
-      // this.showDeleteModal = true
-    }
-  },
+  methods: {},
   created: function created() {
-    var _this3 = this;
+    var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
       var res;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context3.next = 2;
-              return _this3.callApi("get", "app/get_roles");
+              console.log(_this.$route);
+              _context.next = 3;
+              return _this.callApi("get", "app/get_roles");
 
-            case 2:
-              res = _context3.sent;
+            case 3:
+              res = _context.sent;
 
               if (res.status == 200) {
-                _this3.roles = res.data;
+                _this.roles = res.data;
               } else {
-                _this3.swr();
+                _this.swr();
               }
 
-            case 4:
+            case 5:
             case "end":
-              return _context3.stop();
+              return _context.stop();
           }
         }
-      }, _callee3);
+      }, _callee);
     }))();
-  },
-  components: {
-    deleteModal: _components_deleteModal__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['getDeleteModalObj'])),
-  watch: {
-    getDeleteModalObj: function getDeleteModalObj(obj) {
-      if (obj.isDeleted) {
-        this.roles.splice(obj.deletingIndex, 1);
-      }
-    }
   }
 });
 
@@ -4279,6 +4103,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
   data: function data() {
@@ -4288,7 +4113,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.$store.commit('updateUser', this.user);
-    console.log(this.user);
   }
 });
 
@@ -69784,240 +69608,128 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "content" }, [
-      _c(
-        "div",
-        { staticClass: "container-fluid" },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20"
-            },
-            [
-              _c(
-                "p",
-                { staticClass: "_title0" },
-                [
-                  _vm._v("\n                    角色 \n                    "),
-                  _c(
-                    "Button",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = true
-                        }
-                      }
-                    },
-                    [
-                      _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" 新增角色")
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "_overflow _table_div" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20"
+          },
+          [
+            _c(
+              "p",
+              { staticClass: "_title0" },
+              [
+                _vm._v("\n                    角色 \n                    "),
                 _c(
-                  "table",
-                  { staticClass: "_table" },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _vm._l(_vm.roles, function(role, i) {
-                      return _vm.roles.length
-                        ? _c("tr", { key: i }, [
-                            _c("td", [_vm._v(_vm._s(role.id))]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "_table_name" }, [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(role.roleName) +
-                                  "\n                            "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(role.created_at))]),
-                            _vm._v(" "),
-                            _c(
-                              "td",
-                              [
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: { type: "info", size: "small" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showEditModal(role, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("編輯")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: {
-                                      type: "error",
-                                      size: "small",
-                                      loading: role.isDeleting
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showDeletingModal(role, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("刪除")]
-                                )
-                              ],
-                              1
-                            )
-                          ])
-                        : _vm._e()
-                    })
-                  ],
-                  2
+                  "Select",
+                  {
+                    staticStyle: { width: "300px" },
+                    attrs: { placeholder: "請選擇..." },
+                    model: {
+                      value: _vm.data.role_id,
+                      callback: function($$v) {
+                        _vm.$set(_vm.data, "role_id", $$v)
+                      },
+                      expression: "data.role_id"
+                    }
+                  },
+                  _vm._l(_vm.roles, function(r, i) {
+                    return _vm.roles.length
+                      ? _c("Option", { key: i, attrs: { value: r.id } }, [
+                          _vm._v(_vm._s(r.roleName))
+                        ])
+                      : _vm._e()
+                  }),
+                  1
                 )
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "Modal",
-            {
-              attrs: {
-                title: "Add role",
-                "mask-closable": false,
-                closable: false
-              },
-              model: {
-                value: _vm.addModal,
-                callback: function($$v) {
-                  _vm.addModal = $$v
-                },
-                expression: "addModal"
-              }
-            },
-            [
-              _c("Input", {
-                attrs: { placeholder: "Add role name" },
-                model: {
-                  value: _vm.data.roleName,
-                  callback: function($$v) {
-                    _vm.$set(_vm.data, "roleName", $$v)
-                  },
-                  expression: "data.roleName"
-                }
-              }),
-              _vm._v(" "),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "_overflow _table_div" }, [
               _c(
-                "div",
-                { attrs: { slot: "footer" }, slot: "footer" },
+                "table",
+                { staticClass: "_table" },
                 [
-                  _c(
-                    "Button",
-                    {
-                      attrs: { type: "default" },
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = false
-                        }
-                      }
-                    },
-                    [_vm._v("關閉")]
-                  ),
+                  _vm._m(0),
                   _vm._v(" "),
-                  _c(
-                    "Button",
-                    {
-                      attrs: {
-                        type: "primary",
-                        disabled: _vm.isAdding,
-                        loading: _vm.isAdding
-                      },
-                      on: { click: _vm.add }
-                    },
-                    [_vm._v(_vm._s(_vm.isAdding ? "處理中..." : "新增role"))]
-                  )
+                  _vm._l(_vm.resources, function(r, i) {
+                    return _c("tr", { key: i }, [
+                      _c("td", [_vm._v(_vm._s(r.resourceName))]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c("Checkbox", {
+                            model: {
+                              value: r.read,
+                              callback: function($$v) {
+                                _vm.$set(r, "read", $$v)
+                              },
+                              expression: "r.read"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c("Checkbox", {
+                            model: {
+                              value: r.write,
+                              callback: function($$v) {
+                                _vm.$set(r, "write", $$v)
+                              },
+                              expression: "r.write"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c("Checkbox", {
+                            model: {
+                              value: r.update,
+                              callback: function($$v) {
+                                _vm.$set(r, "update", $$v)
+                              },
+                              expression: "r.update"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c("Checkbox", {
+                            model: {
+                              value: r.delete,
+                              callback: function($$v) {
+                                _vm.$set(r, "delete", $$v)
+                              },
+                              expression: "r.delete"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  })
                 ],
-                1
+                2
               )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "Modal",
-            {
-              attrs: {
-                title: "編輯角色",
-                "mask-closable": false,
-                closable: false
-              },
-              model: {
-                value: _vm.editModal,
-                callback: function($$v) {
-                  _vm.editModal = $$v
-                },
-                expression: "editModal"
-              }
-            },
-            [
-              _c("Input", {
-                attrs: { placeholder: "Edit role name" },
-                model: {
-                  value: _vm.editData.roleName,
-                  callback: function($$v) {
-                    _vm.$set(_vm.editData, "roleName", $$v)
-                  },
-                  expression: "editData.roleName"
-                }
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { attrs: { slot: "footer" }, slot: "footer" },
-                [
-                  _c(
-                    "Button",
-                    {
-                      attrs: { type: "default" },
-                      on: {
-                        click: function($event) {
-                          _vm.editModal = false
-                        }
-                      }
-                    },
-                    [_vm._v("關閉")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "Button",
-                    {
-                      attrs: {
-                        type: "primary",
-                        disabled: _vm.isAdding,
-                        loading: _vm.isAdding
-                      },
-                      on: { click: _vm.edit }
-                    },
-                    [_vm._v(_vm._s(_vm.isAdding ? "處理中..." : "編輯角色"))]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("delete-modal")
-        ],
-        1
-      )
+            ])
+          ]
+        )
+      ])
     ])
   ])
 }
@@ -70027,13 +69739,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", [_vm._v("ID")]),
+      _c("th", [_vm._v("Resoruce name")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Role Type")]),
+      _c("th", [_vm._v("Read")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Created at")]),
+      _c("th", [_vm._v("Write")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Action")])
+      _c("th", [_vm._v("Update")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Delete")])
     ])
   }
 ]
@@ -71313,6 +71027,22 @@ var render = function() {
                           [
                             _c("Icon", { attrs: { type: "ios-speedometer" } }),
                             _vm._v(" 角色管理")
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: "assignRole" } },
+                          [
+                            _c("Icon", { attrs: { type: "ios-speedometer" } }),
+                            _vm._v(" Assign Role")
                           ],
                           1
                         )
@@ -89627,7 +89357,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _admin_pages_adminusers_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./admin/pages/adminusers.vue */ "./resources/js/admin/pages/adminusers.vue");
 /* harmony import */ var _admin_pages_login_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./admin/pages/login.vue */ "./resources/js/admin/pages/login.vue");
 /* harmony import */ var _admin_pages_role_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./admin/pages/role.vue */ "./resources/js/admin/pages/role.vue");
-/* harmony import */ var _admin_pages_assignRole__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./admin/pages/assignRole */ "./resources/js/admin/pages/assignRole.vue");
+/* harmony import */ var _admin_pages_assignRole__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./admin/pages/assignRole */ "./resources/js/admin/pages/assignRole.vue");
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
@@ -89650,25 +89380,32 @@ var routes = [// project routes...
   component: _vuex_usecom_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
 }, {
   path: '/',
-  component: _components_pages_home_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+  component: _components_pages_home_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  name: 'home'
 }, {
   path: '/tags',
-  component: _admin_pages_tags_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+  component: _admin_pages_tags_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+  name: 'tags'
 }, {
   path: '/category',
-  component: _admin_pages_category_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
+  component: _admin_pages_category_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
+  name: 'category'
 }, {
   path: '/adminusers',
-  component: _admin_pages_adminusers_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
+  component: _admin_pages_adminusers_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  name: 'adminusers'
 }, {
   path: '/role',
-  component: _admin_pages_role_vue__WEBPACK_IMPORTED_MODULE_12__["default"]
+  component: _admin_pages_role_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
+  name: 'role'
 }, {
   path: '/assignRole',
-  component: _admin_pages_assignRole__WEBPACK_IMPORTED_MODULE_14__["default"]
+  component: _admin_pages_assignRole__WEBPACK_IMPORTED_MODULE_13__["default"],
+  name: 'assignRole'
 }, {
   path: '/login',
-  component: _admin_pages_login_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
+  component: _admin_pages_login_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+  name: 'login'
 }, {
   path: '/my-new-vue-route',
   component: _components_pages_myFirstVuePage__WEBPACK_IMPORTED_MODULE_2__["default"]

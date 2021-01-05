@@ -24,31 +24,38 @@ const routes = [
     },
     {
         path: '/',
-        component: home
+        component: home,
+        name:'home'
     },
     {
         path: '/tags',
-        component: tags
+        component: tags,
+        name:'tags'
     },
     {
         path: '/category',
-        component: category
+        component: category,
+        name:'category'
     },
     {
         path: '/adminusers',
-        component: adminusers
+        component: adminusers,
+        name:'adminusers'
     },
     {
         path: '/role',
-        component: role
+        component: role,
+        name:'role'
     },
     {
         path: '/assignRole',
-        component: assignRole
+        component: assignRole,
+        name:'assignRole'
     },
     {
         path: '/login',
-        component: login
+        component: login,
+        name:'login'
     },
     {
         path: '/my-new-vue-route',

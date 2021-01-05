@@ -275,7 +275,7 @@ class AdminController extends Controller
     }
     // 撈出特權帳號使用者
     public function getUsers(){
-        return User::orderBy('id','desc')->get();
+        return User::get();
     }
 
     public function adminLogin(Request $request)
