@@ -2565,88 +2565,222 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       data: {
         roleName: "",
-        role_id: null
+        id: null
       },
       roles: [],
+      isSending: false,
       resources: [{
-        resourceName: 'Tags',
+        resourceName: "Tags",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'tags'
+        name: "tags"
       }, {
-        resourceName: 'Category',
+        resourceName: "Category",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'category'
+        name: "category"
       }, {
-        resourceName: 'Admin users',
+        resourceName: "Admin users",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'adminusers'
+        name: "adminusers"
       }, {
-        resourceName: 'Role',
+        resourceName: "Role",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'role'
+        name: "role"
       }, {
-        resourceName: 'Assign role',
+        resourceName: "Assign role",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'assignRole'
+        name: "assignRole"
       }, {
-        resourceName: 'Home',
+        resourceName: "Home",
         read: false,
         write: false,
         update: false,
         "delete": false,
-        name: 'home'
+        name: "home"
+      }],
+      defaultResourcesPermission: [{
+        resourceName: "Tags",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "tags"
+      }, {
+        resourceName: "Category",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "category"
+      }, {
+        resourceName: "Admin users",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "adminusers"
+      }, {
+        resourceName: "Role",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "role"
+      }, {
+        resourceName: "Assign role",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "assignRole"
+      }, {
+        resourceName: "Home",
+        read: false,
+        write: false,
+        update: false,
+        "delete": false,
+        name: "home"
       }]
     };
   },
-  methods: {},
+  methods: {
+    // 送出permission資料
+    assignRoles: function assignRoles() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var data, res, index;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // 將 Javascript 物件轉為 JSON 字串
+                data = JSON.stringify(_this.resources);
+                _context.next = 3;
+                return _this.callApi("post", "app/assign_roles", {
+                  permission: data,
+                  id: _this.data.id
+                });
+
+              case 3:
+                res = _context.sent;
+
+                if (res.status == 200) {
+                  _this.s("Role has been assigned successfully!"); // 利用id取得index的值
+
+
+                  index = _this.roles.findIndex(function (role) {
+                    return role.id == _this.data.id;
+                  }); // 更新資料
+
+                  _this.roles[index].permission = data;
+                } else {
+                  _this.swr();
+                }
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    // 下拉選單，選出要的資料
+    changeAdmin: function changeAdmin() {
+      var _this2 = this;
+
+      // 利用id取得index的值
+      var index = this.roles.findIndex(function (role) {
+        return role.id == _this2.data.id;
+      }); // 撈出idex資料
+
+      var permission = this.roles[index].permission; // 若permission沒有資料
+
+      if (!permission) {
+        // 帶入預設值，checkbox都是空的
+        this.resources = this.defaultResourcesPermission;
+      } else {
+        // 列出permission資料
+        this.resources = JSON.parse(permission);
+      }
+    }
+  },
   created: function created() {
-    var _this = this;
+    var _this3 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
       var res;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              console.log(_this.$route);
-              _context.next = 3;
-              return _this.callApi("get", "app/get_roles");
+              _context2.next = 2;
+              return _this3.callApi("get", "app/get_roles");
 
-            case 3:
-              res = _context.sent;
+            case 2:
+              res = _context2.sent;
 
               if (res.status == 200) {
-                _this.roles = res.data;
+                // 接收所有role的資料
+                _this3.roles = res.data;
+
+                if (res.data.length) {
+                  // Admin ID
+                  _this3.data.id = res.data[0].id; // 若admin permission有資料的話
+
+                  if (res.data[0].permission) {
+                    // 撈出admin資料
+                    // 接收 JSON 字串，轉為 Javascript 物件
+                    _this3.resources = JSON.parse(res.data[0].permission);
+                  }
+                }
               } else {
-                _this.swr();
+                _this3.swr();
               }
 
-            case 5:
+            case 4:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }))();
   }
 });
@@ -69626,12 +69760,13 @@ var render = function() {
                   {
                     staticStyle: { width: "300px" },
                     attrs: { placeholder: "請選擇..." },
+                    on: { "on-change": _vm.changeAdmin },
                     model: {
-                      value: _vm.data.role_id,
+                      value: _vm.data.id,
                       callback: function($$v) {
-                        _vm.$set(_vm.data, "role_id", $$v)
+                        _vm.$set(_vm.data, "id", $$v)
                       },
-                      expression: "data.role_id"
+                      expression: "data.id"
                     }
                   },
                   _vm._l(_vm.roles, function(r, i) {
@@ -69722,7 +69857,27 @@ var render = function() {
                         1
                       )
                     ])
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "center_button" },
+                    [
+                      _c(
+                        "Button",
+                        {
+                          attrs: {
+                            type: "primary",
+                            loading: _vm.isSending,
+                            disabled: _vm.isSending
+                          },
+                          on: { click: _vm.assignRoles }
+                        },
+                        [_vm._v("Assign")]
+                      )
+                    ],
+                    1
+                  )
                 ],
                 2
               )

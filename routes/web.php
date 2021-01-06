@@ -40,6 +40,7 @@ Route::post('/edit_role', 'AdminController@editRole');
 Route::post('/delete_role', 'AdminController@deleteRole');
 // 登入
 Route::post('/admin_login', 'AdminController@adminLogin');
+Route::post('/assign_roles', 'AdminController@assignRole');
 });
 
 

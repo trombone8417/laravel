@@ -344,5 +344,14 @@ class AdminController extends Controller
     public function getRoles(){
         return Role::all();
     }
+    public function assignRole(Request $request){
+        $this->validate($request,[
+            'permission' => 'required',
+            'id' => 'required',
+        ]);
+        return Role::where('id', $request->id)->update([
+            'permission' =>  $request->permission
+        ]);
+    }
 
 }
