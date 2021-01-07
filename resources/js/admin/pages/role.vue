@@ -9,6 +9,7 @@
                     <p class="_title0">
                         角色&nbsp;
                         <Button @click="addModal = true"
+                        v-if="isWritePermitted"
                             ><Icon type="md-add" />&nbsp;新增角色</Button
                         >
                     </p>
@@ -40,6 +41,7 @@
                                         type="info"
                                         size="small"
                                         @click="showEditModal(role, i)"
+                                        v-if="isUpdatePermitted"
                                         >編輯</Button
                                     >
                                     <Button
@@ -47,6 +49,7 @@
                                         size="small"
                                         @click="showDeletingModal(role, i)"
                                         :loading="role.isDeleting"
+                                        v-if="isDeletePermitted"
                                         >刪除</Button
                                     >
                                 </td>

@@ -9,6 +9,7 @@
                     <p class="_title0">
                         Category&nbsp;
                         <Button @click="addModal = true"
+                            v-if="isWritePermitted"
                             ><Icon type="md-add" />&nbsp;Add Category</Button
                         >
                     </p>
@@ -44,6 +45,7 @@
                                         type="info"
                                         size="small"
                                         @click="showEditModal(category, i)"
+                                        v-if="isUpdatePermitted"
                                         >Edit</Button
                                     >
                                     <Button
@@ -51,6 +53,7 @@
                                         size="small"
                                         @click="showDeletingModal(category, i)"
                                         :loading="category.isDeleting"
+                                        v-if="isDeletePermitted"
                                         >Delete</Button
                                     >
                                 </td>
@@ -205,6 +208,8 @@ export default {
                 // 若有新資料加入，加入Array
                 this.categoryLists.unshift(res.data);
                 this.s("Category has been added successfully!");
+                // 刪除檔名
+                this.$refs.uploads.clearFiles()
                 // 關閉modal
                 this.addModal = false;
                 this.data.categoryName = '';

@@ -9,6 +9,7 @@
                     <p class="_title0">
                         Admin&nbsp;
                         <Button @click="addModal = true"
+                            v-if="isWritePermitted"
                             ><Icon type="md-add" />&nbsp;新增admin</Button
                         >
                     </p>
@@ -48,6 +49,7 @@
                                         type="info"
                                         size="small"
                                         @click="showEditModal(user, i)"
+                                        v-if="isUpdatePermitted"
                                         >編輯</Button
                                     >
                                     <Button
@@ -55,6 +57,7 @@
                                         size="small"
                                         @click="showDeletingModal(user, i)"
                                         :loading="user.isDeleting"
+                                        v-if="isDeletePermitted"
                                         >刪除</Button
                                     >
                                 </td>

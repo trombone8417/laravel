@@ -2246,6 +2246,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2515,6 +2518,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
 //
 //
 //
@@ -2971,6 +2975,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3041,7 +3048,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   // 若有新資料加入，加入Array
                   _this.categoryLists.unshift(res.data);
 
-                  _this.s("Category has been added successfully!"); // 關閉modal
+                  _this.s("Category has been added successfully!"); // 刪除檔名
+
+
+                  _this.$refs.uploads.clearFiles(); // 關閉modal
 
 
                   _this.addModal = false;
@@ -3546,6 +3556,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3876,6 +3889,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4039,10 +4055,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
+              console.log(_this3.isReadPermitted);
+              _context3.next = 3;
               return _this3.callApi("get", "app/get_tags");
 
-            case 2:
+            case 3:
               res = _context3.sent;
 
               if (res.status == 200) {
@@ -4051,7 +4068,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.swr();
               }
 
-            case 4:
+            case 5:
             case "end":
               return _context3.stop();
           }
@@ -4247,7 +4264,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.$store.commit('updateUser', this.user), console.log(this.permission);
+    this.$store.commit('setUpdateUser', this.user), this.$store.commit('setUserPermission', this.permission), console.log(this.permission);
   }
 });
 
@@ -69321,21 +69338,23 @@ var render = function() {
                 { staticClass: "_title0" },
                 [
                   _vm._v("\n                    Admin \n                    "),
-                  _c(
-                    "Button",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = true
-                        }
-                      }
-                    },
-                    [
-                      _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" 新增admin")
-                    ],
-                    1
-                  )
+                  _vm.isWritePermitted
+                    ? _c(
+                        "Button",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.addModal = true
+                            }
+                          }
+                        },
+                        [
+                          _c("Icon", { attrs: { type: "md-add" } }),
+                          _vm._v(" 新增admin")
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               ),
@@ -69381,35 +69400,42 @@ var render = function() {
                             _c(
                               "td",
                               [
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: { type: "info", size: "small" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showEditModal(user, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("編輯")]
-                                ),
+                                _vm.isUpdatePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: { type: "info", size: "small" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showEditModal(user, i)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("編輯")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: {
-                                      type: "error",
-                                      size: "small",
-                                      loading: user.isDeleting
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showDeletingModal(user, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("刪除")]
-                                )
+                                _vm.isDeletePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: {
+                                          type: "error",
+                                          size: "small",
+                                          loading: user.isDeleting
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showDeletingModal(
+                                              user,
+                                              i
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("刪除")]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )
@@ -69864,18 +69890,20 @@ var render = function() {
                     "div",
                     { staticClass: "center_button" },
                     [
-                      _c(
-                        "Button",
-                        {
-                          attrs: {
-                            type: "primary",
-                            loading: _vm.isSending,
-                            disabled: _vm.isSending
-                          },
-                          on: { click: _vm.assignRoles }
-                        },
-                        [_vm._v("Assign")]
-                      )
+                      _vm.isWritePermitted
+                        ? _c(
+                            "Button",
+                            {
+                              attrs: {
+                                type: "primary",
+                                loading: _vm.isSending,
+                                disabled: _vm.isSending
+                              },
+                              on: { click: _vm.assignRoles }
+                            },
+                            [_vm._v("Assign")]
+                          )
+                        : _vm._e()
                     ],
                     1
                   )
@@ -69948,21 +69976,23 @@ var render = function() {
                   _vm._v(
                     "\n                    Category \n                    "
                   ),
-                  _c(
-                    "Button",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = true
-                        }
-                      }
-                    },
-                    [
-                      _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" Add Category")
-                    ],
-                    1
-                  )
+                  _vm.isWritePermitted
+                    ? _c(
+                        "Button",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.addModal = true
+                            }
+                          }
+                        },
+                        [
+                          _c("Icon", { attrs: { type: "md-add" } }),
+                          _vm._v(" Add Category")
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               ),
@@ -69996,38 +70026,45 @@ var render = function() {
                             _c(
                               "td",
                               [
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: { type: "info", size: "small" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showEditModal(category, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Edit")]
-                                ),
+                                _vm.isUpdatePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: { type: "info", size: "small" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showEditModal(
+                                              category,
+                                              i
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: {
-                                      type: "error",
-                                      size: "small",
-                                      loading: category.isDeleting
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showDeletingModal(
-                                          category,
-                                          i
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Delete")]
-                                )
+                                _vm.isDeletePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: {
+                                          type: "error",
+                                          size: "small",
+                                          loading: category.isDeleting
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showDeletingModal(
+                                              category,
+                                              i
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Delete")]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )
@@ -70459,21 +70496,23 @@ var render = function() {
                 { staticClass: "_title0" },
                 [
                   _vm._v("\n                    角色 \n                    "),
-                  _c(
-                    "Button",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = true
-                        }
-                      }
-                    },
-                    [
-                      _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" 新增角色")
-                    ],
-                    1
-                  )
+                  _vm.isWritePermitted
+                    ? _c(
+                        "Button",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.addModal = true
+                            }
+                          }
+                        },
+                        [
+                          _c("Icon", { attrs: { type: "md-add" } }),
+                          _vm._v(" 新增角色")
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               ),
@@ -70503,35 +70542,42 @@ var render = function() {
                             _c(
                               "td",
                               [
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: { type: "info", size: "small" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showEditModal(role, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("編輯")]
-                                ),
+                                _vm.isUpdatePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: { type: "info", size: "small" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showEditModal(role, i)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("編輯")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: {
-                                      type: "error",
-                                      size: "small",
-                                      loading: role.isDeleting
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showDeletingModal(role, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("刪除")]
-                                )
+                                _vm.isDeletePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: {
+                                          type: "error",
+                                          size: "small",
+                                          loading: role.isDeleting
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showDeletingModal(
+                                              role,
+                                              i
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("刪除")]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )
@@ -70735,21 +70781,23 @@ var render = function() {
                 { staticClass: "_title0" },
                 [
                   _vm._v("\n                    Tags \n                    "),
-                  _c(
-                    "Button",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.addModal = true
-                        }
-                      }
-                    },
-                    [
-                      _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" 新增tag")
-                    ],
-                    1
-                  )
+                  _vm.isWritePermitted
+                    ? _c(
+                        "Button",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.addModal = true
+                            }
+                          }
+                        },
+                        [
+                          _c("Icon", { attrs: { type: "md-add" } }),
+                          _vm._v(" 新增tag")
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               ),
@@ -70779,35 +70827,39 @@ var render = function() {
                             _c(
                               "td",
                               [
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: { type: "info", size: "small" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showEditModal(tag, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("編輯")]
-                                ),
+                                _vm.isUpdatePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: { type: "info", size: "small" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showEditModal(tag, i)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("編輯")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "Button",
-                                  {
-                                    attrs: {
-                                      type: "error",
-                                      size: "small",
-                                      loading: tag.isDeleting
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.showDeletingModal(tag, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("刪除")]
-                                )
+                                _vm.isDeletePermitted
+                                  ? _c(
+                                      "Button",
+                                      {
+                                        attrs: {
+                                          type: "error",
+                                          size: "small",
+                                          loading: tag.isDeleting
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.showDeletingModal(tag, i)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("刪除")]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )
@@ -88970,11 +89022,25 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -89016,28 +89082,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     i: function i(desc) {
-      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Hey!";
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "通知!";
       this.$Notice.info({
         title: title,
         desc: desc
       });
     },
     s: function s(desc) {
-      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Great!";
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "成功!";
       this.$Notice.success({
         title: title,
         desc: desc
       });
     },
     w: function w(desc) {
-      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Oops!";
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "警告!";
       this.$Notice.warning({
         title: title,
         desc: desc
       });
     },
     e: function e(desc) {
-      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Hey";
+      var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "錯誤";
       this.$Notice.error({
         title: title,
         desc: desc
@@ -89050,8 +89116,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         title: title,
         desc: desc
       });
+    },
+    checkUserPermission: function checkUserPermission(key) {
+      if (!this.userPermission) return true; // 預設權限為false
+
+      var isPermitted = false;
+
+      var _iterator = _createForOfIteratorHelper(this.userPermission),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var d = _step.value;
+
+          if (this.$route.name == d.name) {
+            // 判斷權限是否為true
+            if (d[key]) {
+              // 是的話給與權限
+              isPermitted = true;
+              break;
+            } else {
+              break;
+            }
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      return isPermitted;
     }
-  }
+  },
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+    'userPermission': 'getUserPermission'
+  })), {}, {
+    isReadPermitted: function isReadPermitted() {
+      return this.checkUserPermission('read');
+    },
+    isWritePermitted: function isWritePermitted() {
+      return this.checkUserPermission('write');
+    },
+    isUpdatePermitted: function isUpdatePermitted() {
+      return this.checkUserPermission('update');
+    },
+    isDeletePermitted: function isDeletePermitted() {
+      return this.checkUserPermission('delete');
+    }
+  })
 });
 
 /***/ }),
@@ -89544,7 +89657,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
       deletingIndex: -1,
       isDeleted: false
     },
-    user: false
+    user: false,
+    userPermission: null
   },
   getters: {
     getCounter: function getCounter(state) {
@@ -89552,6 +89666,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     },
     getDeleteModalObj: function getDeleteModalObj(state) {
       return state.deleteModalObj;
+    },
+    getUserPermission: function getUserPermission(state) {
+      return state.userPermission;
     }
   },
   mutations: {
@@ -89571,8 +89688,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     setDeletingModalObj: function setDeletingModalObj(state, data) {
       state.deleteModalObj = data;
     },
-    updateUser: function updateUser(state, data) {
+    setUpdateUser: function setUpdateUser(state, data) {
       state.user = data;
+    },
+    setUserPermission: function setUserPermission(state, data) {
+      state.userPermission = data;
     }
   },
   actions: {

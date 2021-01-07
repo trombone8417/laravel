@@ -55,6 +55,7 @@
                                     :loading="isSending"
                                     :disabled="isSending"
                                     @click="assignRoles"
+                            v-if="isWritePermitted"
                                     >Assign</Button
                                 >
                             </div>
