@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
+    /**
+     * 首頁驗證
+     */
     public function index(Request $request)
     {
         // 確認是否登入且受否為login頁面
@@ -25,7 +28,7 @@ class AdminController extends Controller
 
             return view('welcome');
         }
-        $user=Auth::user();
+        $user = Auth::user();
         // 已登入且角色為User
         if ($user->userType == 'User') {
             return redirect('/login');
@@ -35,13 +38,37 @@ class AdminController extends Controller
             return redirect('/');
         }
 
-        return view('welcome');
+        return $this->checkForPermission($user, $request);
+    }
+
+    /**
+     * 確認使用者權限
+     */
+    public function checkForPermission($user, $request)
+    {
+        // 將json轉成陣列或object
+        $permission = json_decode($user->role->permission);
+        $hasPermission = false;
+        // 使用者是否有讀取權限，由role判斷
+        foreach ($permission as $p) {
+            if ($p->name == $request->path()) {
+                // 若有讀取權限
+                if ($p->read) {
+                    $hasPermission = true;
+                }
+            }
+        }
+        // 跳至首頁
+        if ($hasPermission) return view('welcome');
+        // 轉至權限不足頁面
+        return view('notfound');
     }
 
     /**
      * 登出
      */
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect('/login');
     }
@@ -55,12 +82,12 @@ class AdminController extends Controller
     public function addTag(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'tagName'=>'required'
+        $this->validate($request, [
+            'tagName' => 'required'
         ]);
         // 新增Tag
         return Tag::create([
-            'tagName'=> $request->tagName
+            'tagName' => $request->tagName
         ]);
     }
 
@@ -73,15 +100,14 @@ class AdminController extends Controller
     public function editTag(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'tagName'=>'required',
-            'id'=>'required',
+        $this->validate($request, [
+            'tagName' => 'required',
+            'id' => 'required',
         ]);
         // 更新Tag
         return Tag::where('id', $request->id)->update([
-            'tagName'=> $request->tagName
+            'tagName' => $request->tagName
         ]);
-
     }
 
     /**
@@ -90,8 +116,8 @@ class AdminController extends Controller
     public function deleteTag(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'id'=>'required',
+        $this->validate($request, [
+            'id' => 'required',
         ]);
         // 刪除Tag
         return Tag::where('id', $request->id)->delete();
@@ -104,19 +130,19 @@ class AdminController extends Controller
     public function getTag()
     {
         // id由大到小排序
-        return Tag::orderBy('id','desc')->get();
+        return Tag::orderBy('id', 'desc')->get();
     }
     // 上傳圖片
     public function upload(Request $request)
     {
         // 後端驗證請求資料
-        $this->validate($request,[
+        $this->validate($request, [
             'file' => 'required|mimes:jpg,jpeg,png'
         ]);
         // 命名，例如：1608603484.png
-        $picName = time().'.'.$request->file->extension();
+        $picName = time() . '.' . $request->file->extension();
         // 圖片放置地點
-        $request->file->move(public_path('uploads'),$picName);
+        $request->file->move(public_path('uploads'), $picName);
         return $picName;
     }
     /**
@@ -143,7 +169,7 @@ class AdminController extends Controller
     {
         if (!$hasFullPath) {
             // 照片絕對位置
-            $filePath = public_path().$fileName;
+            $filePath = public_path() . $fileName;
         }
         // 若照片存在的話
         if (file_exists($filePath)) {
@@ -161,14 +187,14 @@ class AdminController extends Controller
     public function addCategory(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'iconImage'=>'required',
-            'categoryName'=>'required',
+        $this->validate($request, [
+            'iconImage' => 'required',
+            'categoryName' => 'required',
         ]);
         // 新增Category
         return Category::create([
-            'iconImage'=> $request->iconImage,
-            'categoryName'=> $request->categoryName,
+            'iconImage' => $request->iconImage,
+            'categoryName' => $request->categoryName,
         ]);
     }
     /**
@@ -187,26 +213,26 @@ class AdminController extends Controller
     public function editCategory(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'iconImage'=>'required',
-            'categoryName'=>'required',
+        $this->validate($request, [
+            'iconImage' => 'required',
+            'categoryName' => 'required',
         ]);
         // 更新Category
         return Category::where('id', $request->id)->update([
-            'iconImage'=> $request->iconImage,
-            'categoryName'=> $request->categoryName,
+            'iconImage' => $request->iconImage,
+            'categoryName' => $request->categoryName,
         ]);
-
     }
     /**
      * 刪除Category
      */
-    public function deleteCategory(Request $request){
+    public function deleteCategory(Request $request)
+    {
         // 刪除uploads的圖片
         $this->deleteFileFromServer($request->iconImage);
         // 驗證請求資料
-        $this->validate($request,[
-            'id'=>'required',
+        $this->validate($request, [
+            'id' => 'required',
         ]);
         // 刪除Category
         return Category::where('id', $request->id)->delete();
@@ -215,45 +241,45 @@ class AdminController extends Controller
     public function createUser(Request $request)
     {
         // bail：一個屬性首次驗證失敗時，停止此屬性的其他驗證規則。
-        $this->validate($request,[
+        $this->validate($request, [
             // 全名
-            'fullName'=>'required',
+            'fullName' => 'required',
             // Email不能重複，須符合email格式
-            'email'=>'bail|required|email|unique:users',
+            'email' => 'bail|required|email|unique:users',
             // 密碼不得少於六個字元
-            'password'=>'bail|required|min:6',
+            'password' => 'bail|required|min:6',
             // 使用者角色
-            'role_id'=>'required',
+            'role_id' => 'required',
         ]);
         // 密碼加密
         $password = bcrypt($request->password);
         $user = User::create([
-            'fullName'=>$request->fullName,
+            'fullName' => $request->fullName,
             // 加密過後的密碼
-            'email'=>$request->email,
-            'password'=>$password,
-            'role_id'=>$request->userType,
+            'email' => $request->email,
+            'password' => $password,
+            'role_id' => $request->userType,
         ]);
         return $user;
     }
 
     public function editUser(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             // 全名
-            'fullName'=>'required',
+            'fullName' => 'required',
             // Email不能重複，須符合email格式
-            'email'=>"bail|required|email|unique:users,email,$request->id",
+            'email' => "bail|required|email|unique:users,email,$request->id",
             // 密碼不得少於六個字元
-            'password'=>'min:6',
+            'password' => 'min:6',
             // 使用者角色
-            'role_id'=>'required',
+            'role_id' => 'required',
         ]);
         // 密碼加密
         $data = [
-            'fullName'=>$request->fullName,
-            'email'=>$request->email,
-            'role_id'=>$request->role_id,
+            'fullName' => $request->fullName,
+            'email' => $request->email,
+            'role_id' => $request->role_id,
         ];
         if ($request->password) {
             // 加密過後的密碼
@@ -267,22 +293,23 @@ class AdminController extends Controller
     public function deleteUser(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'id'=>'required',
+        $this->validate($request, [
+            'id' => 'required',
         ]);
         // 刪除User
         return User::where('id', $request->id)->delete();
     }
     // 撈出特權帳號使用者
-    public function getUsers(){
+    public function getUsers()
+    {
         return User::get();
     }
 
     public function adminLogin(Request $request)
     {
-        $this->validate($request,[
-            'email'=>'bail|required|email',
-            'password'=>'bail|required|min:6',
+        $this->validate($request, [
+            'email' => 'bail|required|email',
+            'password' => 'bail|required|min:6',
         ]);
 
 
@@ -290,22 +317,22 @@ class AdminController extends Controller
             // 確認使用者是否登入且角色為User
             $user = Auth::user();
             Log::info($user->role);
-        if ($user->role->isAdmin == 0) {
-            // 若角色是User的話，登出
-            Auth::logout();
-            // 401 Unauthorized
+            if ($user->role->isAdmin == 0) {
+                // 若角色是User的話，登出
+                Auth::logout();
+                // 401 Unauthorized
+                return response()->json([
+                    'msg' => '使用者角色錯誤',
+                ], 401);
+            }
             return response()->json([
-                'msg'=>'使用者角色錯誤',
-            ],401);
-        }
-            return response()->json([
-                'msg'=>'登入成功',
+                'msg' => '登入成功',
             ]);
-        }else {
+        } else {
             // 401 Unauthorized
             return response()->json([
-                'msg'=>'登入失敗',
-            ],401);
+                'msg' => '登入失敗',
+            ], 401);
         }
     }
     /**
@@ -313,8 +340,8 @@ class AdminController extends Controller
      */
     public function createRole(Request $request)
     {
-        $this->validate($request,[
-            'roleName'=>'required',
+        $this->validate($request, [
+            'roleName' => 'required',
         ]);
         return Role::create([
             'roleName' => $request->roleName
@@ -322,8 +349,8 @@ class AdminController extends Controller
     }
     public function editRole(Request $request)
     {
-        $this->validate($request,[
-            'roleName'=>'required',
+        $this->validate($request, [
+            'roleName' => 'required',
         ]);
         return Role::where('id', $request->id)->update([
             'roleName' => $request->roleName
@@ -332,8 +359,8 @@ class AdminController extends Controller
     public function deleteRole(Request $request)
     {
         // 驗證請求資料
-        $this->validate($request,[
-            'id'=>'required',
+        $this->validate($request, [
+            'id' => 'required',
         ]);
         // 刪除User
         return Role::where('id', $request->id)->delete();
@@ -341,11 +368,13 @@ class AdminController extends Controller
 
 
     // 撈出特權帳號使用者
-    public function getRoles(){
+    public function getRoles()
+    {
         return Role::all();
     }
-    public function assignRole(Request $request){
-        $this->validate($request,[
+    public function assignRole(Request $request)
+    {
+        $this->validate($request, [
             'permission' => 'required',
             'id' => 'required',
         ]);
@@ -353,5 +382,4 @@ class AdminController extends Controller
             'permission' =>  $request->permission
         ]);
     }
-
 }

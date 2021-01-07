@@ -122,7 +122,7 @@ export default {
                     write: false,
                     update: false,
                     delete: false,
-                    name: "home"
+                    name: "/"
                 }
             ],
             defaultResourcesPermission: [
@@ -172,7 +172,7 @@ export default {
                     write: false,
                     update: false,
                     delete: false,
-                    name: "home"
+                    name: "/"
                 }
             ]
         };
