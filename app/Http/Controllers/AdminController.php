@@ -146,6 +146,27 @@ class AdminController extends Controller
         return $picName;
     }
     /**
+     * vue-editor-js 上傳圖片
+     */
+    public function uploadEditorImage(Request $request)
+    {
+        // 後端驗證請求資料
+        $this->validate($request, [
+            'image' => 'required|mimes:jpg,jpeg,png'
+        ]);
+        // 命名，例如：1608603484.png
+        $picName = time() . '.' . $request->image->extension();
+        // 圖片放置地點
+        $request->image->move(public_path('uploads'), $picName);
+        return response()->json([
+            'success' => 1,
+            'file' => [
+                'url' => "http://127.0.0.1:8000/uploads/$picName"
+            ]
+        ]);
+        return $picName;
+    }
+    /**
      * 刪除圖片
      *
      * @param Request $request

@@ -16,6 +16,7 @@ import adminusers from './admin/pages/adminusers.vue';
 import login from './admin/pages/login.vue';
 import role from './admin/pages/role.vue';
 import assignRole from './admin/pages/assignRole';
+import createBlog from './admin/pages/createBlog';
 const routes = [
     // project routes...
     {
@@ -36,6 +37,11 @@ const routes = [
         path: '/category',
         component: category,
         name:'category'
+    },
+    {
+        path: '/createBlog',
+        component: createBlog,
+        name:'createBlog'
     },
     {
         path: '/adminusers',

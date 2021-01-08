@@ -42,7 +42,7 @@ Route::post('/delete_role', 'AdminController@deleteRole');
 Route::post('/admin_login', 'AdminController@adminLogin');
 Route::post('/assign_roles', 'AdminController@assignRole');
 });
-
+Route::post('createBlog', 'AdminController@uploadEditorImage');
 
 Route::get('/logout', 'AdminController@logout');
 Route::get('/', 'AdminController@index');
