@@ -41,6 +41,10 @@ Route::post('/delete_role', 'AdminController@deleteRole');
 // 登入
 Route::post('/admin_login', 'AdminController@adminLogin');
 Route::post('/assign_roles', 'AdminController@assignRole');
+// blog
+Route::post('/create-blog', 'AdminController@createBlog');
+
+
 });
 Route::post('createBlog', 'AdminController@uploadEditorImage');
 Route::get('slug', 'AdminController@slug');

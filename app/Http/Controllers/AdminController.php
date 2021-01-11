@@ -389,7 +389,9 @@ class AdminController extends Controller
     }
 
 
-    // 撈出特權帳號使用者
+    /**
+     * 撈出所有使用者角色
+     */
     public function getRoles()
     {
         return Role::all();
@@ -405,7 +407,7 @@ class AdminController extends Controller
         ]);
     }
     /**
-     * Part 38
+     * 判斷標題是否重複
      */
     public function slug()
     {
@@ -420,5 +422,21 @@ class AdminController extends Controller
 
         ]);
         return $title;
+    }
+    /**
+     * 新增部落格文章
+     */
+    public function createBlog(Request $request)
+    {
+        return Blog::create([
+
+            'title' => $request->title ,
+            'post' => $request->post,
+            'post_excerpt' => $request->post_excerpt ,
+            'user_id' => Auth::user()->id ,
+            'metaDescription' => $request->metaDescription,
+            'jsonData' => $request->jsonData,
+
+        ]);
     }
 }

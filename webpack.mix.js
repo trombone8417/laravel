@@ -11,9 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sourceMaps(false, 'source-map')
-    .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js').version();
 
     // 停止通知
     mix.disableNotifications();
