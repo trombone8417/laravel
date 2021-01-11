@@ -6,11 +6,13 @@ import store from './store';
 import ViewUI from 'view-design';
 // 需下載版本號 "vue-editor-js": "^1.1.1"
 import Editor  from 'vue-editor-js';
-Vue.use(Editor)
+Vue.use(Editor);
 import 'view-design/dist/styles/iview.css';
 Vue.use(ViewUI);
 import common from './common';
+import jsonToHtml from './jsonToHtml';
 Vue.mixin(common);
+Vue.mixin(jsonToHtml);
 
 Vue.component('mainapp',require('./components/mainapp.vue').default);
 const app = new Vue({
