@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Blog;
+use App\Blogcategory;
+use App\Blogtag;
 use App\Tag;
 use App\Category;
 use App\User;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AdminController extends Controller
 {
@@ -338,7 +342,6 @@ class AdminController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             // 確認使用者是否登入且角色為User
             $user = Auth::user();
-            Log::info($user->role);
             if ($user->role->isAdmin == 0) {
                 // 若角色是User的話，登出
                 Auth::logout();
@@ -428,15 +431,43 @@ class AdminController extends Controller
      */
     public function createBlog(Request $request)
     {
-        return Blog::create([
+        $categories = $request->category_id;
+        $tags = $request->tag_id;
+        $blogCategories = [];
+        $blogTags = [];
+        // 使用資料庫的交易機制
+        DB::beginTransaction();
+        try {
+            $blog = Blog::create([
+                'title' => $request->title ,
+                'post' => $request->post,
+                'post_excerpt' => $request->post_excerpt ,
+                'user_id' => Auth::user()->id ,
+                'metaDescription' => $request->metaDescription,
+                'jsonData' => $request->jsonData,
+            ]);
 
-            'title' => $request->title ,
-            'post' => $request->post,
-            'post_excerpt' => $request->post_excerpt ,
-            'user_id' => Auth::user()->id ,
-            'metaDescription' => $request->metaDescription,
-            'jsonData' => $request->jsonData,
+            foreach ($categories as $c ) {
+                array_push($blogCategories, ['category_id' => $c, 'blog_id' =>$blog->id]);
+            }
+            Blogcategory::insert($blogCategories);
 
-        ]);
+            foreach ($tags as $c ) {
+                array_push($blogTags, ['tag_id' => $c, 'blog_idsss' =>$blog->id]);
+            }
+            Blogtag::insert($blogTags);
+            // 成功的話進行commit
+            DB::commit();
+            return 'done';
+
+        } catch (\Throwable $th) {
+            // 有錯誤的話進行交易回滾
+            DB::rollback();
+            return response()->json([
+                'msg' => '出現錯誤',
+            ], 500);
+        }
+
+
     }
 }

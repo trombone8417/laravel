@@ -3619,10 +3619,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3704,10 +3727,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         post_excerpt: '',
         metaDescription: '',
         category_id: [],
+        tag_id: [],
         jsonData: null
       },
       articleHTML: "",
       category: [],
+      tag: [],
       isCreating: false
     };
   },
@@ -3789,7 +3814,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 8:
                 res = _context2.sent;
 
-                if (res.status === 201) {
+                if (res.status === 200) {
                   _this2.s('Blog has been created successfully!');
                 } else {
                   _this2.swr();
@@ -3882,25 +3907,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-      var res;
+      var _yield$Promise$all, _yield$Promise$all2, cat, tag;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return _this5.callApi("get", "app/get_category");
+              return Promise.all([_this5.callApi("get", "app/get_category"), _this5.callApi("get", "app/get_tags")]);
 
             case 2:
-              res = _context4.sent;
+              _yield$Promise$all = _context4.sent;
+              _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 2);
+              cat = _yield$Promise$all2[0];
+              tag = _yield$Promise$all2[1];
 
-              if (res.status == 200) {
-                _this5.category = res.data;
-                console.log(_this5.category);
+              if (cat.status == 200) {
+                _this5.category = cat.data;
+                _this5.tag = tag.data;
               } else {
                 _this5.swr();
               }
 
-            case 4:
+            case 7:
             case "end":
               return _context4.stop();
           }
@@ -72274,6 +72303,37 @@ var render = function() {
                   _vm._l(_vm.category, function(c, i) {
                     return _c("Option", { key: i, attrs: { value: c.id } }, [
                       _vm._v(_vm._s(c.categoryName))
+                    ])
+                  }),
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "_input_field" },
+              [
+                _c(
+                  "Select",
+                  {
+                    attrs: {
+                      filterable: "",
+                      multiple: "",
+                      placeholder: "Select tag"
+                    },
+                    model: {
+                      value: _vm.data.tag_id,
+                      callback: function($$v) {
+                        _vm.$set(_vm.data, "tag_id", $$v)
+                      },
+                      expression: "data.tag_id"
+                    }
+                  },
+                  _vm._l(_vm.tag, function(t, i) {
+                    return _c("Option", { key: i, attrs: { value: t.id } }, [
+                      _vm._v(_vm._s(t.tagName))
                     ])
                   }),
                   1
