@@ -13,7 +13,7 @@
             </p>
             <div style="text-align:center">
                 <p>
-                    確定要刪除嗎?
+                    {{getDeleteModalObj.msg}}
                 </p>
             </div>
             <div slot="footer">
@@ -54,7 +54,7 @@ export default {
                 this.getDeleteModalObj.data
             );
             if (res.status === 200) {
-                this.s('刪除成功!');
+                this.s(this.getDeleteModalObj.successMsg);
                 // 進行刪除
                 this.$store.commit('setDeleteModal', true);
             } else {

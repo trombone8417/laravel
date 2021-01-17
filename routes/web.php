@@ -43,11 +43,14 @@ Route::post('/admin_login', 'AdminController@adminLogin');
 Route::post('/assign_roles', 'AdminController@assignRole');
 // blog
 Route::post('/create-blog', 'AdminController@createBlog');
-
-
+// get the blogs item
+Route::get('blogsdata','AdminController@blogdata');
+Route::post('delete_blog','AdminController@deleteBlog');
 });
 Route::post('createBlog', 'AdminController@uploadEditorImage');
 Route::get('slug', 'AdminController@slug');
+
+Route::get('blogdata','AdminController@blogdata');
 
 Route::get('/logout', 'AdminController@logout');
 Route::get('/', 'AdminController@index');

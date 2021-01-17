@@ -141,6 +141,8 @@ export default {
             const res = await this.callApi('post','app/create-blog', this.data)
             if (res.status===200) {
                 this.s('Blog has been created successfully!')
+                // 轉址
+                this.$router.push('/blogs')
             }else{
                 this.swr()
             }
@@ -197,7 +199,7 @@ export default {
             });
         }
     },
-    
+
     async created() {
         const [cat, tag] = await Promise.all([
             this.callApi("get", "app/get_category"),

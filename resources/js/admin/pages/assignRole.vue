@@ -110,6 +110,14 @@ export default {
                     name: "createBlog"
                 },
                 {
+                    resourceName: "Blogs",
+                    read: false,
+                    write: false,
+                    update: false,
+                    delete: false,
+                    name: "blogs"
+                },
+                {
                     resourceName: "Admin users",
                     read: false,
                     write: false,
@@ -167,6 +175,14 @@ export default {
                     update: false,
                     delete: false,
                     name: "createBlog"
+                },
+                {
+                    resourceName: "Blogs",
+                    read: false,
+                    write: false,
+                    update: false,
+                    delete: false,
+                    name: "blogs"
                 },
                 {
                     resourceName: "Admin users",
@@ -249,6 +265,7 @@ export default {
                     // 撈出admin資料
                     // 接收 JSON 字串，轉為 Javascript 物件
                     this.resources = JSON.parse(res.data[0].permission);
+                    //this.resources = this.defaultResourcesPermission; 帶入預設值
                 }
             }
         } else {
