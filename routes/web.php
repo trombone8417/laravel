@@ -46,6 +46,8 @@ Route::post('/create-blog', 'AdminController@createBlog');
 // get the blogs item
 Route::get('blogsdata','AdminController@blogdata');
 Route::post('delete_blog','AdminController@deleteBlog');
+Route::get('blog_single/{id}','AdminController@singleBlogItem');
+Route::post('update_blog/{id}','AdminController@updateBlog');
 });
 Route::post('createBlog', 'AdminController@uploadEditorImage');
 Route::get('slug', 'AdminController@slug');
@@ -54,7 +56,7 @@ Route::get('blogdata','AdminController@blogdata');
 
 Route::get('/logout', 'AdminController@logout');
 Route::get('/', 'AdminController@index');
-Route::any('{slug}','AdminController@index');
+Route::any('{slug}','AdminController@index')->where('slug', '([A-z\d-\/_.]+)?');
 
 // part 23 12:55
 // Route::get('/', function () {

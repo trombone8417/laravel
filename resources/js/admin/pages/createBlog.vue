@@ -137,6 +137,14 @@ export default {
             await this.outputHtml(data.blocks);
             this.data.post = this.articleHTML
             this.data.jsonData = JSON.stringify(data)
+
+            if(this.data.post.trim()=='') return this.e('Post is required')
+            if(this.data.title.trim()=='') return this.e('Title is required')
+            if(this.data.post_excerpt.trim()=='') return this.e('Post exerpt is required')
+            if(this.data.metaDescription.trim()=='') return this.e('Meta description is required')
+            if(!this.data.tag_id.length) return this.e('Tag is required')
+            if(!this.data.category_id.length) return this.e('Category is required')
+
             this.isCreating = true
             const res = await this.callApi('post','app/create-blog', this.data)
             if (res.status===200) {

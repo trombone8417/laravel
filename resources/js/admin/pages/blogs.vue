@@ -50,7 +50,7 @@
                                     <Button
                                         type="info"
                                         size="small"
-                                        @click="showEditModal(blog, i)"
+                                        @click="$router.push(`/editblog/${blog.id}`)"
                                         v-if="isUpdatePermitted"
                                         >編輯</Button
                                     >

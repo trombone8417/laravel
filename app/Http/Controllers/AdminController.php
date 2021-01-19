@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -54,6 +55,11 @@ class AdminController extends Controller
         // 將json轉成陣列或object
         $permission = json_decode($user->role->permission);
         $hasPermission = false;
+        // 若為 http://127.0.0.1:8000/editblog/xxx 先給予權限，之後再轉至notfound.vue
+        // 若沒有給予權限則會轉至notfound.blade.view頁面
+        if(Str::contains($request->path(), 'editblog')){
+            $hasPermission = true;
+        }
         // 使用者是否有讀取權限，由role判斷
         foreach ($permission as $p) {
             if ($p->name == $request->path()) {
@@ -429,6 +435,50 @@ class AdminController extends Controller
     /**
      * 新增部落格文章
      */
+    public function updateBlog(Request $request,$id)
+    {
+        $categories = $request->category_id;
+        $tags = $request->tag_id;
+        $blogCategories = [];
+        $blogTags = [];
+        // 使用資料庫的交易機制
+        DB::beginTransaction();
+        try {
+            $blog = Blog::where('id',$id)->update([
+                'title' => $request->title ,
+                'slug' => $request->title ,
+                'post' => $request->post,
+                'post_excerpt' => $request->post_excerpt ,
+                'user_id' => Auth::user()->id ,
+                'metaDescription' => $request->metaDescription,
+                'jsonData' => $request->jsonData,
+            ]);
+
+            foreach ($categories as $c ) {
+                array_push($blogCategories, ['category_id' => $c, 'blog_id' =>$id]);
+            }
+            // 先刪除之前的資料
+            Blogcategory::where('blog_id',$id)->delete();
+            // 再加入新的資料
+            Blogcategory::insert($blogCategories);
+
+            foreach ($tags as $c ) {
+                array_push($blogTags, ['tag_id' => $c, 'blog_id' =>$id]);
+            }
+            Blogtag::where('blog_id',$id)->delete();
+            Blogtag::insert($blogTags);
+            // 成功的話進行commit
+            DB::commit();
+            return 'done';
+
+        } catch (\Throwable $th) {
+            // 有錯誤的話進行交易回滾
+            DB::rollback();
+            return response()->json([
+                'msg' => '出現錯誤',
+            ], 500);
+        }
+    }
     public function createBlog(Request $request)
     {
         $categories = $request->category_id;
@@ -478,5 +528,9 @@ class AdminController extends Controller
     public function deleteBlog(Request $request)
     {
         return Blog::where('id',$request->id)->delete();
+    }
+    public function singleBlogItem(Request $request,$id)
+    {
+        return Blog::with(['tag','cat'])->where('id',$id)->first();
     }
 }
