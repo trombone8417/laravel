@@ -20,9 +20,14 @@
                                     <li class="dis_fx_cntr">
                                         <a href="home.html">HOME</a>
                                     </li>
-                                    <li>
-                                        <a href="gallery.html">gallery</a>
-                                    </li>
+                                    @if (count($categories)>0)
+                                        @foreach ($categories as $nav)
+                                        <li>
+                                            <a href="home.html">{{$nav->categoryName}}</a>
+                                        </li>
+                                        @endforeach
+                                    @endif
+
                                     <li>
                                         <a href="about_us.html">about</a>
                                     </li>
@@ -30,9 +35,7 @@
                                     <li>
                                         <a href="contact.html">CONTACT</a>
                                     </li>
-                                    <li>
-                                        <a href="contact_me.html">author</a>
-                                    </li>
+
                                 </ul>
                             </div>
                             <div class="menu_srch d-flex">
