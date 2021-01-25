@@ -747,14 +747,14 @@ p{
 }
 .blog_banner{
     position: relative;
-    background: url(../../img/blog_details_banner.jpg) no-repeat center center;
+    background:  no-repeat center center;
     min-height: 360px;
     z-index: 1;
     background-size: cover;
     padding: 100px 0px;
 }
 .blog_banner:after {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgb(159 192 248);
     content: "";
     height: 100%;
     position: absolute;

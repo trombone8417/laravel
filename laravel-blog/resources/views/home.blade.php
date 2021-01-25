@@ -38,7 +38,7 @@
                 @if (count($blogs)>0)
                 @foreach ($blogs as $b)
                 <div class="col-12 col-md-6 col-lg-4">
-                    <a href="blog_post.html">
+                    <a href="/blog/{{$b->slug}}">
                         <div class="home_card">
                             <div class="home_card_top">
                                 <img src="img/card3.jpg" alt="image">
@@ -49,7 +49,7 @@
                                     <ul class="home_card_bottom_text_ul">
                                         @foreach ($b->cat as $c)
                                         <li>
-                                            <a href="blog_post.html">{{$c->categoryName}}</a>
+                                            <a href="#">{{$c->categoryName}}</a>
                                             <span><i class="fas fa-angle-right"></i></span>
                                         </li>
                                         @endforeach
