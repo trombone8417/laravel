@@ -38,7 +38,7 @@
 											</div>
 											<div class="post_author_info">
 											<a href=""><h4 class="post_author_title">{{$blog->user->fullName}}</h4></a>
-												<P>Avi is a full-stack developer skilled with Python, Javascript and many other language</P>
+											
 											</div>
 										</div>
 										<div class="post_author_r8">
@@ -235,101 +235,28 @@
 						<div class="blog_post_r8">
 								<h4 class="trnd_artcl_h4">TRENDING ARTICLES</h4>
 							<div class="blog_post_r8_all">
-								<!-- iteam -->
-								<div class="blog_post_r8_item">
+                                <!-- iteam -->
+                                @if (count($relatedBlogs)>0)
+                                @foreach ($relatedBlogs as $b)
+                                <div class="blog_post_r8_item">
 									<div class="blog_post_item_lft">
 										<img src="" alt="image">
 									</div>
 									<div class="blog_post_item_r8">
-										<a href="">
+										<a href="/blog/{{$b->slug}}">
 											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
+												{{$b->title}}
 											</h4>
 										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
+										<a href=""><p class="author_name2">{{$b->user->fullName}}</p></a>
 									</div>
 								</div>
 								<!-- iteam -->
+                                @endforeach
 
-									<!-- iteam -->
-								<div class="blog_post_r8_item">
-									<div class="blog_post_item_lft">
-										<img src="" alt="image">
-									</div>
-									<div class="blog_post_item_r8">
-										<a href="">
-											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
-											</h4>
-										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
-									</div>
-								</div>
-								<!-- iteam -->
+                                @endif
 
-									<!-- iteam -->
-								<div class="blog_post_r8_item">
-									<div class="blog_post_item_lft">
-										<img src="" alt="image">
-									</div>
-									<div class="blog_post_item_r8">
-										<a href="">
-											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
-											</h4>
-										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
-									</div>
-								</div>
-								<!-- iteam -->
 
-									<!-- iteam -->
-								<div class="blog_post_r8_item">
-									<div class="blog_post_item_lft">
-										<img src="" alt="image">
-									</div>
-									<div class="blog_post_item_r8">
-										<a href="">
-											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
-											</h4>
-										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
-									</div>
-								</div>
-								<!-- iteam -->
-
-									<!-- iteam -->
-								<div class="blog_post_r8_item">
-									<div class="blog_post_item_lft">
-										<img src="" alt="image">
-									</div>
-									<div class="blog_post_item_r8">
-										<a href="">
-											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
-											</h4>
-										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
-									</div>
-								</div>
-								<!-- iteam -->
-
-									<!-- iteam -->
-								<div class="blog_post_r8_item">
-									<div class="blog_post_item_lft">
-										<img src="" alt="image">
-									</div>
-									<div class="blog_post_item_r8">
-										<a href="">
-											<h4 class="blog_post_item_r8_h4">
-												The Upwork 100: 3 Things You May Have Missed
-											</h4>
-										</a>
-										<a href=""><p class="author_name2">-Amy Sept</p></a>
-									</div>
-								</div>
-								<!-- iteam -->
 							</div>
 							<div class="course_price mar_t60">
 								<div class="course_price_top">
