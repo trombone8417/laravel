@@ -55,4 +55,36 @@ class BlogController extends Controller
         $cat = Category::select('id','categoryName')->get('id','categoryName');
         $view->with('cat',$cat);
     }
+
+    public function categoryIndex(Request $request, $categoryName, $id)
+    {
+        // 其他相關blog
+        $blogs = Blog::with('user')->whereHas('cat',function($q) use($id){
+            $q->where('category_id', $id);
+        })->orderBy('id','desc')->select('id','title','slug','user_id','featuredImage')->paginate(1);
+
+        return view('category')->with(['categoryName'=> $categoryName, 'blogs' => $blogs]);
+    }
+
+    public function tagIndex(Request $request, $tagName, $id)
+    {
+        // 其他相關blog
+         $blogs = Blog::with('user')->whereHas('tag',function($q) use($id){
+            $q->where('tag_id', $id);
+        })->orderBy('id','desc')->select('id','title','slug','user_id','featuredImage')->paginate(1);
+
+        return view('tag')->with(['tagName'=> $tagName, 'blogs' => $blogs]);
+    }
+    /**
+     * 列出所有部落格
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function allBlogs(Request $request)
+    {
+        $blogs = Blog::orderBy('id', 'desc')->with(['cat', 'user'])->select('id','title','post_excerpt','slug','user_id','featuredImage')->paginate(1);
+
+        return view('blogs')->with(['blogs'=>$blogs]);
+    }
 }

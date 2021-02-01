@@ -38,7 +38,7 @@
 											</div>
 											<div class="post_author_info">
 											<a href=""><h4 class="post_author_title">{{$blog->user->fullName}}</h4></a>
-											
+
 											</div>
 										</div>
 										<div class="post_author_r8">
@@ -313,7 +313,7 @@
                                     @if (count($blog->tag)>0)
                                     @foreach ($blog->tag as $t)
                                     <li>
-                                        <a href="">{{$t->tagName}}</a>
+                                        <a href="/tag/{{$t->tagName}}/{{$t->id}}">{{$t->tagName}}</a>
 									</li>
                                     @endforeach
                                     @endif
