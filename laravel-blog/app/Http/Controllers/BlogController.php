@@ -87,4 +87,31 @@ class BlogController extends Controller
 
         return view('blogs')->with(['blogs'=>$blogs]);
     }
+    /**
+     * 搜尋blog
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        // 搜尋字串
+        $str = $request->str;
+        // 撈出blogs
+        $blogs = Blog::orderBy('id', 'desc')->with(['cat', 'user'])->select('id', 'title', 'post_excerpt', 'slug', 'user_id', 'featuredImage');
+        // 判斷是否有搜尋字串，有的話進行搜尋，包含 title、categoryName、tagName
+        // 若無的話，return 撈出blogs
+        $blogs->when($str!='',function($q) use($str){
+            $q->where('title', 'LIKE', "%{$str}%")
+            ->orWhereHas('cat', function ($q) use ($str) {
+                $q->where('categoryName', $str);
+            })->orWhereHas('tag', function ($q) use ($str) {
+                $q->where('tagName', $str);
+            });
+        });
+
+        $blogs = $blogs->paginate(1);
+        $blogs = $blogs->appends($request->all());
+        return view('blogs')->with(['blogs' => $blogs]);
+    }
 }

@@ -34,7 +34,7 @@
                                         @foreach ($b->cat as $c)
                                         <li>
                                             <a href="#">{{$c->categoryName}}</a>
-                                            <span><i class="fas fa-angle-right"></i></span>
+                                            <span><i class="fa fa-angle-right"></i></span>
                                         </li>
                                         @endforeach
                                     </ul>

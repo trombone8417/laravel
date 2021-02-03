@@ -11,7 +11,7 @@
                     <div class="col-12 col-md-4 col-lg-4">
                         <a href="">
                             <div class="banner_box">
-                                <i class="fab fa-laravel"></i>
+                                <i class="fa fa-laravel"></i>
                                 <h3 class="banner_box_h3">{{$categoryName}}</h3>
                                 <p>The Toptal Blog is the top hub for developers.</p>
                             </div>
@@ -48,7 +48,7 @@
                                         @foreach ($b->cat as $c)
                                         <li>
                                             <a href="#">{{$c->categoryName}}</a>
-                                            <span><i class="fas fa-angle-right"></i></span>
+                                            <span><i class="fa fa-angle-right"></i></span>
                                         </li>
                                         @endforeach
                                     </ul>
