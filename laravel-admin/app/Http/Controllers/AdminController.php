@@ -41,7 +41,7 @@ class AdminController extends Controller
         }
         // 若登入為其他使用者，轉到Home頁面
         if ($request->path() == 'login') {
-            return redirect('/');
+            return redirect('');
         }
 
         return $this->checkForPermission($user, $request);
@@ -52,6 +52,7 @@ class AdminController extends Controller
      */
     public function checkForPermission($user, $request)
     {
+        $homepage="";
         // 將json轉成陣列或object
         $permission = json_decode($user->role->permission);
         $hasPermission = false;
@@ -62,7 +63,11 @@ class AdminController extends Controller
         }
         // 使用者是否有讀取權限，由role判斷
         foreach ($permission as $p) {
-            if ($p->name == $request->path()) {
+            if($request->path()=="/")
+            {
+                $homepage="";
+            }
+            if ($p->name == $homepage) {
                 // 若有讀取權限
                 if ($p->read) {
                     $hasPermission = true;
@@ -520,11 +525,16 @@ class AdminController extends Controller
         }
     }
 
-    public function blogdata()
+    public function blogdata(Request $request)
     {
-        return Blog::with(['tag','cat'])->orderBy('id','desc')->get();
+        return Blog::with(['tag','cat'])->orderBy('id','desc')->paginate($request->total);
     }
-
+    /**
+     * 刪除部落格
+     *
+     * @param Request $request
+     * @return void
+     */
     public function deleteBlog(Request $request)
     {
         return Blog::where('id',$request->id)->delete();

@@ -36,21 +36,37 @@
                                 <td class="_table_name">
                                     {{ blog.title }}
                                 </td>
-                                <td><span  v-for="(c,j) in blog.cat" v-if="blog.cat.length"><Tag type="border">{{ c.categoryName }}</Tag></span></td>
-                                <td><span v-for="(t,j) in blog.tag" v-if="blog.tag.length"><Tag type="border">{{ t.tagName }}</Tag></span></td>
+                                <td>
+                                    <span
+                                        v-for="(c, j) in blog.cat"
+                                        v-if="blog.cat.length"
+                                        ><Tag type="border">{{
+                                            c.categoryName
+                                        }}</Tag></span
+                                    >
+                                </td>
+                                <td>
+                                    <span
+                                        v-for="(t, j) in blog.tag"
+                                        v-if="blog.tag.length"
+                                        ><Tag type="border">{{
+                                            t.tagName
+                                        }}</Tag></span
+                                    >
+                                </td>
                                 <td>
                                     {{ blog.views }}
                                 </td>
                                 <td>
-                                    <Button
-                                        type="info"
-                                        size="small"
+                                    <Button type="info" size="small"
                                         >Visit blog</Button
                                     >
                                     <Button
                                         type="info"
                                         size="small"
-                                        @click="$router.push(`/editblog/${blog.id}`)"
+                                        @click="
+                                            $router.push(`/editblog/${blog.id}`)
+                                        "
                                         v-if="isUpdatePermitted"
                                         >編輯</Button
                                     >
@@ -67,7 +83,7 @@
                         </table>
                     </div>
                 </div>
-
+                <Page :total="pageInfo.total" :current="pageInfo.current_page" :page-size="parseInt(pageInfo.per_page)" @on-change="getBlogData" v-if="pageInfo" />
                 <!-- 刪除提示 -->
                 <delete-modal></delete-modal>
             </div>
@@ -75,12 +91,11 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import deleteModal from "../components/deleteModal";
 export default {
     data() {
         return {
-
             isAdding: false,
             blogs: [],
             tag: [],
@@ -89,46 +104,51 @@ export default {
             isDeleting: false,
             deleteItem: {},
             deletingIndex: -1,
+            total: 1,
+            pageInfo:null
         };
     },
 
     methods: {
         showDeletingModal(blog, i) {
-            console.log("the index is ",i)
+            console.log("the index is ", i);
             const deleteModalObj = {
                 showDeleteModal: true,
                 deleteUrl: "app/delete_blog",
-                data: {id: blog.id},
+                data: { id: blog.id },
                 deletingIndex: i,
                 isDeleted: false,
-                msg:'確定要刪除這篇文章嗎?',
-                successMsg:'Blog has been deleted successfully!'
+                msg: "確定要刪除這篇文章嗎?",
+                successMsg: "Blog has been deleted successfully!"
             };
             this.$store.commit("setDeletingModalObj", deleteModalObj);
-            console.log('delete method called')
+            console.log("delete method called");
             // this.deleteItem = tag
             // this.deletingIndex = i
             // this.showDeleteModal = true
+        },
+        async getBlogData(page = 1) {
+            const res = await this.callApi("get", `app/blogsdata?page=${page}&total=${this.total}`);
+            if (res.status == 200) {
+                this.blogs = res.data.data;
+                this.pageInfo = res.data;
+            } else {
+                this.swr();
+            }
         }
     },
 
     async created() {
-        console.log(this.isReadPermitted)
-        const res = await this.callApi("get", "app/blogsdata");
-        if (res.status == 200) {
-            this.blogs = res.data;
-        } else {
-            this.swr();
-        }
+        this.getBlogData();
     },
     components: {
         deleteModal
     },
-    computed : {
-        ...mapGetters(['getDeleteModalObj'])
+    computed: {
+        ...mapGetters(["getDeleteModalObj"])
     },
-    watch : {
-        getDeleteModalObj(obj){
+    watch: {
+        getDeleteModalObj(obj) {
             if (obj.isDeleted) {
                 this.blogs.splice(obj.deletingIndex, i);
             }
