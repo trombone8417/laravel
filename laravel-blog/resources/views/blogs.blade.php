@@ -39,7 +39,7 @@
                                         @endforeach
                                     </ul>
                                     @endif
-                                    <a href="blog_post.html">
+                                    <a href="/blog/{{$b->slug}}">
                                         <h2 class="home_card_h2">{{$b->title}}</h2>
                                     </a>
                                     <p class="post_p">
