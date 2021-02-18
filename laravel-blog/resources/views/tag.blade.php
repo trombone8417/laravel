@@ -7,17 +7,13 @@
         <div class="row">
             <div class="col-12 col-md-10 col-lg-8">
                 <div class="row">
-
                     <div class="col-12 col-md-4 col-lg-4">
-                        <a href="">
-                            <div class="banner_box">
-                                <i class="fa fa-laravel"></i>
-                                <h3 class="banner_box_h3">{{$tagName}}</h3>
-                                <p>The Toptal Blog is the top hub for developers.</p>
-                            </div>
-                        </a>
+                        <div class="banner_box">
+                            <i class="fa fa-laravel"></i>
+                            <h3 class="banner_box_h3">{{$tagName}}</h3>
+                            <p>The Toptal Blog is the top hub for developers.</p>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -60,13 +56,11 @@
                                         {{$b->post_excerpt}}
                                     </p>
                                     <div class="home_card_bottom_tym">
-                                        <div class="home_card_btm_left">
+                                        <!-- <div class="home_card_btm_left">
                                             <img src="#" alt="image">
-                                        </div>
+                                        </div> -->
                                         <div class="home_card_btm_r8">
-                                            <a href="contact_me.html">
-                                                <p class="author_name">{{$b->user->fullName}}</p>
-                                            </a>
+                                            <p class="author_name">{{$b->user->fullName}}</p>
                                             <ul class="home_card_btm_r8_ul">
                                                 <li>Dec 4, 2019</li>
                                                 <li><span class="dot"></span>3 Min Read</li>
@@ -84,7 +78,6 @@
             {!! $blogs->links() !!}
         </div>
     </div>
-
 </div>
 <!-- BODY -->
 @endsection

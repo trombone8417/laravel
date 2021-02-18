@@ -4,7 +4,7 @@
         <div class="menu_all" id="myHeader">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-4 col-md-4 col-lg-4">
+                    <!-- <div class="col-4 col-md-4 col-lg-4">
                         <div class="logo">
                             <a href="/">
                                 <div class="logo_img">
@@ -12,7 +12,7 @@
                                 </div>
                             </a>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-8 col-md-8 col-lg-8">
                         <div class="menu_right d-flex">
                             <div class="menu_right_list">
@@ -27,15 +27,6 @@
                                         </li>
                                         @endforeach
                                     @endif
-
-                                    <li>
-                                        <a href="about_us.html">about</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="contact.html">CONTACT</a>
-                                    </li>
-
                                 </ul>
                             </div>
                             <search></search>

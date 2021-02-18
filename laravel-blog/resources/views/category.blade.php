@@ -7,17 +7,13 @@
         <div class="row">
             <div class="col-12 col-md-10 col-lg-8">
                 <div class="row">
-
                     <div class="col-12 col-md-4 col-lg-4">
-                        <a href="">
                             <div class="banner_box">
                                 <i class="fa fa-laravel"></i>
                                 <h3 class="banner_box_h3">{{$categoryName}}</h3>
                                 <p>The Toptal Blog is the top hub for developers.</p>
                             </div>
-                        </a>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -38,35 +34,34 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <a href="/blog/{{$b->slug}}">
                         <div class="home_card">
-                            <div class="home_card_top">
+                            <!-- <div class="home_card_top">
                                 <img src="#" alt="image">
-                            </div>
+                            </div> -->
                             <div class="home_card_bottom">
                                 <div class="home_card_bottom_text">
                                     @if (count($b->cat)>0)
                                     <ul class="home_card_bottom_text_ul">
                                         @foreach ($b->cat as $c)
                                         <li>
-                                            <a href="#">{{$c->categoryName}}</a>
-                                            <span><i class="fa fa-angle-right"></i></span>
+                                            <p>{{$c->categoryName}} &nbsp;</p>
                                         </li>
                                         @endforeach
                                     </ul>
                                     @endif
-                                    <a href="blog_post.html">
+                                    <a href="/blog/{{$b->slug}}">
                                         <h2 class="home_card_h2">{{$b->title}}</h2>
                                     </a>
                                     <p class="post_p">
                                         {{$b->post_excerpt}}
                                     </p>
                                     <div class="home_card_bottom_tym">
-                                        <div class="home_card_btm_left">
+                                        <!-- <div class="home_card_btm_left">
                                             <img src="#" alt="image">
-                                        </div>
+                                        </div> -->
                                         <div class="home_card_btm_r8">
-                                            <a href="contact_me.html">
+                                            <p>
                                                 <p class="author_name">{{$b->user->fullName}}</p>
-                                            </a>
+                                            </p>
                                             <ul class="home_card_btm_r8_ul">
                                                 <li>Dec 4, 2019</li>
                                                 <li><span class="dot"></span>3 Min Read</li>
@@ -84,7 +79,6 @@
             {!! $blogs->links() !!}
         </div>
     </div>
-
 </div>
 <!-- BODY -->
 @endsection

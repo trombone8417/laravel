@@ -5,7 +5,7 @@
 <section class="banner_sec">
     <div class="container">
         <div class="text-center">
-                    <h1 class="text-white">全部文章</h1>
+            <h1 class="text-white">全部文章</h1>
         </div>
     </div>
 </section>
@@ -24,9 +24,9 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <a href="/blog/{{$b->slug}}">
                         <div class="home_card">
-                            <div class="home_card_top">
+                            <!-- <div class="home_card_top">
                                 <img src="#" alt="image">
-                            </div>
+                            </div> -->
                             <div class="home_card_bottom">
                                 <div class="home_card_bottom_text">
                                     @if (count($b->cat)>0)
@@ -50,9 +50,9 @@
                                             <img src="#" alt="image">
                                         </div>
                                         <div class="home_card_btm_r8">
-                                            <a href="contact_me.html">
+                                            
                                                 <p class="author_name">{{$b->user->fullName}}</p>
-                                            </a>
+
                                             <ul class="home_card_btm_r8_ul">
                                                 <li>Dec 4, 2019</li>
                                                 <li><span class="dot"></span>3 Min Read</li>
